@@ -41,6 +41,6 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
         final long duration = System.currentTimeMillis() - startTime;
         LOGGER.info("Response({} ms): status={}, payload={}", value("X-Response-Time", duration),
                 value("X-Response-Status", wrappedResponse.getStatus()),
-                wrappedResponse.toString());
+                IOUtils.toString(wrappedResponse.getContentAsByteArray(), wrappedResponse.getCharacterEncoding()));
     }
 }
