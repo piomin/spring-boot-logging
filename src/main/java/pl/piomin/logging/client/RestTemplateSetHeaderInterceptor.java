@@ -9,8 +9,7 @@ import org.springframework.http.client.ClientHttpResponse;
 import java.io.IOException;
 
 public class RestTemplateSetHeaderInterceptor implements ClientHttpRequestInterceptor {
-
-    @Override
+    
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
         request.getHeaders().add("X-Correlation-ID", MDC.get("X-Correlation-ID"));
         request.getHeaders().add("X-Request-ID", MDC.get("X-Request-ID"));
