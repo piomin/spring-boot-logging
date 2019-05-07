@@ -1,27 +1,22 @@
 package pl.piomin.logging.config;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import net.logstash.logback.appender.LogstashTcpSocketAppender;
 import net.logstash.logback.encoder.LogstashEncoder;
 import org.slf4j.LoggerFactory;
-import pl.piomin.logging.client.RestTemplateSetHeaderInterceptor;
-import pl.piomin.logging.filter.SpringLoggingFilter;
-import pl.piomin.logging.util.UniqueIDGenerator;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
+import pl.piomin.logging.filter.SpringLoggingFilter;
+import pl.piomin.logging.util.UniqueIDGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
-@PropertySource("classpath:/pl/piomin/logging/config/app.yml")
 public class SpringLoggingAutoConfiguration {
 
 	private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
