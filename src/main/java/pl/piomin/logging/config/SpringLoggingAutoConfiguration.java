@@ -29,9 +29,9 @@ public class SpringLoggingAutoConfiguration {
 	String url;
 	@Value("${spring.application.name:-}")
 	String name;
-	@Value("${spring.logstash.ssl.trustStoreLocation}")
+	@Value("${spring.logstash.ssl.trustStoreLocation:#{null}}")
 	Optional<String> trustStoreLocation;
-	@Value("${spring.logstash.ssl.trustStorePassword}")
+	@Value("${spring.logstash.ssl.trustStorePassword:#{null}}")
 	Optional<String> trustStorePassword;
 
 	@Bean
