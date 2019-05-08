@@ -14,6 +14,7 @@
 		<javax-servlet.version>4.0.1</javax-servlet.version>
 		<logstash-logback.version>5.3</logstash-logback.version>
 		<spring.version>5.1.6.RELEASE</spring.version>
+		<spring.boot.version>2.1.4.RELEASE</spring.boot.version>
 		<slf4j.version>1.7.26</slf4j.version>
 	</properties>
 
@@ -27,6 +28,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${spring.boot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.logstash.logback</groupId>
