@@ -3,6 +3,8 @@ package pl.piomin.logging.wrapper;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -63,6 +65,12 @@ public class SpringResponseWrapper extends HttpServletResponseWrapper {
 		else {
 			return new byte[0];
 		}
+	}
+
+	public Map<String, String> getAllHeaders() {
+		final Map<String, String> headers = new HashMap<>();
+		getHeaderNames().forEach(it -> headers.put(it, getHeader(it)));
+		return  headers;
 	}
 
 }
