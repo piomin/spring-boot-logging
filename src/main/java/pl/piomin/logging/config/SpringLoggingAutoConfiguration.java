@@ -8,11 +8,14 @@ import net.logstash.logback.appender.LogstashTcpSocketAppender;
 import net.logstash.logback.encoder.LogstashEncoder;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
+
+import pl.piomin.logging.client.RestTemplateSetHeaderInterceptor;
 import pl.piomin.logging.filter.SpringLoggingFilter;
 import pl.piomin.logging.util.UniqueIDGenerator;
 
@@ -45,9 +48,11 @@ public class SpringLoggingAutoConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean(RestTemplate.class)
 	public RestTemplate restTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
 		List<ClientHttpRequestInterceptor> interceptorList = new ArrayList<ClientHttpRequestInterceptor>();
+		interceptorList.add(new RestTemplateSetHeaderInterceptor());
 		restTemplate.setInterceptors(interceptorList);
 		return restTemplate;
 	}
