@@ -51,16 +51,26 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
             final SpringResponseWrapper wrappedResponse = new SpringResponseWrapper(response);
             wrappedResponse.setHeader("X-Request-ID", MDC.get("X-Request-ID"));
             wrappedResponse.setHeader("X-Correlation-ID", MDC.get("X-Correlation-ID"));
-            chain.doFilter(wrappedRequest, wrappedResponse);
-            final long duration = System.currentTimeMillis() - startTime;
-            if (logHeaders)
-                LOGGER.info("Response({} ms): status={}, payload={}, headers={}", value("X-Response-Time", duration),
-                        value("X-Response-Status", wrappedResponse.getStatus()), IOUtils.toString(wrappedResponse.getContentAsByteArray(),
-                        wrappedResponse.getCharacterEncoding()), wrappedResponse.getAllHeaders());
-            else
-                LOGGER.info("Response({} ms): status={}, payload={}", value("X-Response-Time", duration),
-                        value("X-Response-Status", wrappedResponse.getStatus()),
-                        IOUtils.toString(wrappedResponse.getContentAsByteArray(), wrappedResponse.getCharacterEncoding()));
+            try {
+                chain.doFilter(wrappedRequest, wrappedResponse);
+            } catch (Exception e) {
+                logResponse(startTime, wrappedResponse, 500);
+                throw e;
+            }
+            logResponse(startTime, wrappedResponse, wrappedResponse.getStatus());
         }
     }
+
+    private void logResponse(long startTime, SpringResponseWrapper wrappedResponse, int overriddenStatus) throws IOException {
+        final long duration = System.currentTimeMillis() - startTime;
+        if (logHeaders)
+            LOGGER.info("Response({} ms): status={}, payload={}, headers={}", value("X-Response-Time", duration),
+                    value("X-Response-Status", overriddenStatus), IOUtils.toString(wrappedResponse.getContentAsByteArray(),
+                            wrappedResponse.getCharacterEncoding()), wrappedResponse.getAllHeaders());
+        else
+            LOGGER.info("Response({} ms): status={}, payload={}", value("X-Response-Time", duration),
+                    value("X-Response-Status", overriddenStatus),
+                    IOUtils.toString(wrappedResponse.getContentAsByteArray(), wrappedResponse.getCharacterEncoding()));
+    }
+
 }
