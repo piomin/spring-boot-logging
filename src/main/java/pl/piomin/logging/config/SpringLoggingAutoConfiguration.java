@@ -7,6 +7,7 @@ import ch.qos.logback.core.net.ssl.SSLConfiguration;
 import net.logstash.logback.appender.LogstashTcpSocketAppender;
 import net.logstash.logback.encoder.LogstashEncoder;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -19,6 +20,7 @@ import pl.piomin.logging.client.RestTemplateSetHeaderInterceptor;
 import pl.piomin.logging.filter.SpringLoggingFilter;
 import pl.piomin.logging.util.UniqueIDGenerator;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +38,8 @@ public class SpringLoggingAutoConfiguration {
 	Optional<String> trustStoreLocation;
 	@Value("${spring.logstash.ssl.trustStorePassword:#{null}}")
 	Optional<String> trustStorePassword;
+	@Autowired(required = false)
+	Optional<RestTemplate> template;
 
 	@Bean
 	public UniqueIDGenerator generator() {
@@ -82,6 +86,15 @@ public class SpringLoggingAutoConfiguration {
 		logstashTcpSocketAppender.start();
 		loggerContext.getLogger(Logger.ROOT_LOGGER_NAME).addAppender(logstashTcpSocketAppender);
 		return logstashTcpSocketAppender;
+	}
+
+	@PostConstruct
+	public void init() {
+		template.ifPresent(restTemplate -> {
+			List<ClientHttpRequestInterceptor> interceptorList = new ArrayList<ClientHttpRequestInterceptor>();
+			interceptorList.add(new RestTemplateSetHeaderInterceptor());
+			restTemplate.setInterceptors(interceptorList);
+		});
 	}
 
 }
