@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -26,18 +27,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Configuration
+@ConfigurationProperties(prefix = "logging.logstash")
 public class SpringLoggingAutoConfiguration {
 
 	private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
 
-	@Value("${spring.logstash.url:localhost:8500}")
-	String url;
+	private String url = "localhost:8500";
+	private Optional<String> trustStoreLocation;
+	private Optional<String> trustStorePassword;
 	@Value("${spring.application.name:-}")
 	String name;
-	@Value("${spring.logstash.ssl.trustStoreLocation:#{null}}")
-	Optional<String> trustStoreLocation;
-	@Value("${spring.logstash.ssl.trustStorePassword:#{null}}")
-	Optional<String> trustStorePassword;
 	@Autowired(required = false)
 	Optional<RestTemplate> template;
 
@@ -62,7 +61,7 @@ public class SpringLoggingAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnProperty("spring.logstash.enabled")
+	@ConditionalOnProperty("logging.logstash.enabled")
 	public LogstashTcpSocketAppender logstashAppender() {
 		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
 		LogstashTcpSocketAppender logstashTcpSocketAppender = new LogstashTcpSocketAppender();
@@ -95,6 +94,30 @@ public class SpringLoggingAutoConfiguration {
 			interceptorList.add(new RestTemplateSetHeaderInterceptor());
 			restTemplate.setInterceptors(interceptorList);
 		});
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public Optional<String> getTrustStoreLocation() {
+		return trustStoreLocation;
+	}
+
+	public void setTrustStoreLocation(Optional<String> trustStoreLocation) {
+		this.trustStoreLocation = trustStoreLocation;
+	}
+
+	public Optional<String> getTrustStorePassword() {
+		return trustStorePassword;
+	}
+
+	public void setTrustStorePassword(Optional<String> trustStorePassword) {
+		this.trustStorePassword = trustStorePassword;
 	}
 
 }
