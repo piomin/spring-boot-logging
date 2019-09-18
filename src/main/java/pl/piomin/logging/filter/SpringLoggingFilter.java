@@ -34,9 +34,9 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringLoggingFilter.class);
     private UniqueIDGenerator generator;
 
-    @Value("${spring.logging.ignorePatterns:#{null}}")
+    @Value("${logging.logstash.ignorePatterns:#{null}}")
     Optional<String> ignorePatterns;
-    @Value("${spring.logging.includeHeaders:false}")
+    @Value("${logging.logstash.includeHeaders:false}")
     boolean logHeaders;
     @Autowired
     ApplicationContext context;

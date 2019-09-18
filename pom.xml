@@ -4,7 +4,7 @@
 
 	<groupId>com.github.piomin</groupId>
 	<artifactId>logstash-logging-spring-boot-starter</artifactId>
-	<version>1.2.0.RELEASE</version>
+	<version>1.2.1.RELEASE</version>
 	<name>logstash-logging-spring-boot-starter</name>
 	<description>Library for HTTP logging with Spring Boot</description>
 	<url>https://github.com/piomin/spring-boot-logging</url>
