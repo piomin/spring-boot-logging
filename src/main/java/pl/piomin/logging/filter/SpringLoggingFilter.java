@@ -33,16 +33,16 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringLoggingFilter.class);
     private UniqueIDGenerator generator;
+    private Optional<String> ignorePatterns;
+    private boolean logHeaders;
 
-    @Value("${logging.logstash.ignorePatterns:#{null}}")
-    Optional<String> ignorePatterns;
-    @Value("${logging.logstash.includeHeaders:false}")
-    boolean logHeaders;
     @Autowired
     ApplicationContext context;
 
-    public SpringLoggingFilter(UniqueIDGenerator generator) {
+    public SpringLoggingFilter(UniqueIDGenerator generator, Optional<String> ignorePatterns, boolean logHeaders) {
         this.generator = generator;
+        this.ignorePatterns = ignorePatterns;
+        this.logHeaders = logHeaders;
     }
 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {

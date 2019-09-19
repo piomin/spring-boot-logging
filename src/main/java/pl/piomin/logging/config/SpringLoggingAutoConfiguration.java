@@ -33,6 +33,8 @@ public class SpringLoggingAutoConfiguration {
 	private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
 
 	private String url = "localhost:8500";
+	private Optional<String> ignorePatterns;
+	private boolean logHeaders;
 	private Optional<String> trustStoreLocation;
 	private Optional<String> trustStorePassword;
 	@Value("${spring.application.name:-}")
@@ -47,7 +49,7 @@ public class SpringLoggingAutoConfiguration {
 
 	@Bean
 	public SpringLoggingFilter loggingFilter() {
-		return new SpringLoggingFilter(generator());
+		return new SpringLoggingFilter(generator(), ignorePatterns, logHeaders);
 	}
 
 	@Bean
@@ -120,4 +122,19 @@ public class SpringLoggingAutoConfiguration {
 		this.trustStorePassword = trustStorePassword;
 	}
 
+	public Optional<String> getIgnorePatterns() {
+		return ignorePatterns;
+	}
+
+	public void setIgnorePatterns(Optional<String> ignorePatterns) {
+		this.ignorePatterns = ignorePatterns;
+	}
+
+	public boolean isLogHeaders() {
+		return logHeaders;
+	}
+
+	public void setLogHeaders(boolean logHeaders) {
+		this.logHeaders = logHeaders;
+	}
 }
