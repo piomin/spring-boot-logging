@@ -60,11 +60,11 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
             if (logHeaders)
                 LOGGER.info("Request: method={}, uri={}, payload={}, headers={}, audit={}", wrappedRequest.getMethod(),
                         wrappedRequest.getRequestURI(), IOUtils.toString(wrappedRequest.getInputStream(),
-                        wrappedRequest.getCharacterEncoding()), wrappedRequest.getAllHeaders(), true);
+                        wrappedRequest.getCharacterEncoding()), wrappedRequest.getAllHeaders(), value("audit", true));
             else
                 LOGGER.info("Request: method={}, uri={}, payload={}, audit={}", wrappedRequest.getMethod(),
                         wrappedRequest.getRequestURI(), IOUtils.toString(wrappedRequest.getInputStream(),
-                        wrappedRequest.getCharacterEncoding()), true);
+                        wrappedRequest.getCharacterEncoding()), value("audit", true));
             final SpringResponseWrapper wrappedResponse = new SpringResponseWrapper(response);
             wrappedResponse.setHeader("X-Request-ID", MDC.get("X-Request-ID"));
             wrappedResponse.setHeader("X-Correlation-ID", MDC.get("X-Correlation-ID"));
@@ -84,11 +84,11 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
         if (logHeaders)
             LOGGER.info("Response({} ms): status={}, payload={}, headers={}, audit={}", value("X-Response-Time", duration),
                     value("X-Response-Status", overriddenStatus), IOUtils.toString(wrappedResponse.getContentAsByteArray(),
-                            wrappedResponse.getCharacterEncoding()), wrappedResponse.getAllHeaders(), true);
+                            wrappedResponse.getCharacterEncoding()), wrappedResponse.getAllHeaders(), value("audit", true));
         else
             LOGGER.info("Response({} ms): status={}, payload={}, audit={}", value("X-Response-Time", duration),
                     value("X-Response-Status", overriddenStatus),
-                    IOUtils.toString(wrappedResponse.getContentAsByteArray(), wrappedResponse.getCharacterEncoding()), true);
+                    IOUtils.toString(wrappedResponse.getContentAsByteArray(), wrappedResponse.getCharacterEncoding()), value("audit", true));
     }
 
     private void getHandlerMethod(HttpServletRequest request) throws Exception {
