@@ -5,10 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExecutionChain;
@@ -25,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 import static net.logstash.logback.argument.StructuredArguments.value;
 
@@ -33,20 +29,20 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringLoggingFilter.class);
     private UniqueIDGenerator generator;
-    private Optional<String> ignorePatterns;
+    private String ignorePatterns;
     private boolean logHeaders;
 
     @Autowired
     ApplicationContext context;
 
-    public SpringLoggingFilter(UniqueIDGenerator generator, Optional<String> ignorePatterns, boolean logHeaders) {
+    public SpringLoggingFilter(UniqueIDGenerator generator, String ignorePatterns, boolean logHeaders) {
         this.generator = generator;
         this.ignorePatterns = ignorePatterns;
         this.logHeaders = logHeaders;
     }
 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        if (ignorePatterns.isPresent() && request.getRequestURI().matches(ignorePatterns.get())) {
+        if (ignorePatterns != null && request.getRequestURI().matches(ignorePatterns)) {
             chain.doFilter(request, response);
         } else {
             generator.generateAndSetMDC(request);

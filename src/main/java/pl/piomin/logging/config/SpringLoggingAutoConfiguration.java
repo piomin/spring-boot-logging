@@ -33,10 +33,10 @@ public class SpringLoggingAutoConfiguration {
 	private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
 
 	private String url = "localhost:8500";
-	private Optional<String> ignorePatterns;
+	private String ignorePatterns;
 	private boolean logHeaders;
-	private Optional<String> trustStoreLocation;
-	private Optional<String> trustStorePassword;
+	private String trustStoreLocation;
+	private String trustStorePassword;
 	@Value("${spring.application.name:-}")
 	String name;
 	@Autowired(required = false)
@@ -70,14 +70,15 @@ public class SpringLoggingAutoConfiguration {
 		logstashTcpSocketAppender.setName(LOGSTASH_APPENDER_NAME);
 		logstashTcpSocketAppender.setContext(loggerContext);
 		logstashTcpSocketAppender.addDestination(url);
-		trustStoreLocation.ifPresent(it -> {
+		if (trustStoreLocation != null) {
 			SSLConfiguration sslConfiguration = new SSLConfiguration();
 			KeyStoreFactoryBean factory = new KeyStoreFactoryBean();
-			factory.setLocation(it);
-			trustStorePassword.ifPresent(factory::setPassword);
+			factory.setLocation(trustStoreLocation);
+			if (trustStorePassword != null)
+				factory.setPassword(trustStorePassword);
 			sslConfiguration.setTrustStore(factory);
 			logstashTcpSocketAppender.setSsl(sslConfiguration);
-		});
+		}
 		LogstashEncoder encoder = new LogstashEncoder();
 		encoder.setContext(loggerContext);
 		encoder.setIncludeContext(true);
@@ -106,27 +107,27 @@ public class SpringLoggingAutoConfiguration {
 		this.url = url;
 	}
 
-	public Optional<String> getTrustStoreLocation() {
+	public String getTrustStoreLocation() {
 		return trustStoreLocation;
 	}
 
-	public void setTrustStoreLocation(Optional<String> trustStoreLocation) {
+	public void setTrustStoreLocation(String trustStoreLocation) {
 		this.trustStoreLocation = trustStoreLocation;
 	}
 
-	public Optional<String> getTrustStorePassword() {
+	public String getTrustStorePassword() {
 		return trustStorePassword;
 	}
 
-	public void setTrustStorePassword(Optional<String> trustStorePassword) {
+	public void setTrustStorePassword(String trustStorePassword) {
 		this.trustStorePassword = trustStorePassword;
 	}
 
-	public Optional<String> getIgnorePatterns() {
+	public String getIgnorePatterns() {
 		return ignorePatterns;
 	}
 
-	public void setIgnorePatterns(Optional<String> ignorePatterns) {
+	public void setIgnorePatterns(String ignorePatterns) {
 		this.ignorePatterns = ignorePatterns;
 	}
 
