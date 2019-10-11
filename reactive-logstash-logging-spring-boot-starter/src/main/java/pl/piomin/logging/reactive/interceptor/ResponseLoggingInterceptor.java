@@ -10,7 +10,9 @@ import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -31,42 +33,23 @@ public class ResponseLoggingInterceptor extends ServerHttpResponseDecorator {
 
 	@Override
 	public Mono<Void> writeWith(Publisher<? extends DataBuffer> body) {
-		body.subscribe(new Subscriber<DataBuffer>() {
-			@Override
-			public void onSubscribe(Subscription subscription) {
-				LOGGER.info("onSubscribe ");
-			}
-
-			@Override
-			public void onNext(DataBuffer dataBuffer) {
-				LOGGER.info("onNext ");
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		Flux<DataBuffer> buffer = Flux.from(body);
+		return super.writeWith(buffer.doOnNext(dataBuffer -> {
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			try {
+				Channels.newChannel(baos).write(dataBuffer.asByteBuffer().asReadOnlyBuffer());
+				String bodyx = IOUtils.toString(baos.toByteArray(), "UTF-8");
+				LOGGER.info("Response({} ms): status={}, payload={}, audit={}", value("X-Response-Time", System.currentTimeMillis() - startTime),
+						value("X-Response-Status", getStatusCode().value()), bodyx, value("audit", true));
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
 				try {
-					Channels.newChannel(baos).write(dataBuffer.asByteBuffer().asReadOnlyBuffer());
-					String body = IOUtils.toString(baos.toByteArray(), "UTF-8");
-					LOGGER.info("Response({} ms): status={}, payload={}, audit={}", value("X-Response-Time", System.currentTimeMillis() - startTime),
-							value("X-Response-Status", getStatusCode().value()), body, value("audit", true));
+					baos.close();
 				} catch (IOException e) {
 					e.printStackTrace();
-				} finally {
-					try {
-						baos.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
 				}
 			}
-
-			@Override
-			public void onError(Throwable throwable) {
-				LOGGER.info("onError ");
-			}
-
-			@Override
-			public void onComplete() {
-				LOGGER.info("onComplete ");
-			}
-		});
-		return super.writeWith(body);
+		}));
 	}
 }
