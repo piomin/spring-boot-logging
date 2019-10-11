@@ -12,6 +12,7 @@
 
 	<modules>
 		<module>logstash-logging-spring-boot-starter</module>
+		<module>reactive-logstash-logging-spring-boot-starter</module>
 	</modules>
 
 </project>
