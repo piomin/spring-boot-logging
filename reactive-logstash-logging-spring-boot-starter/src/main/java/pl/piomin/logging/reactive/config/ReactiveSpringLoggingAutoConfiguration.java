@@ -15,6 +15,7 @@ public class ReactiveSpringLoggingAutoConfiguration {
 	private String url = "localhost:8500";
 	private String ignorePatterns;
 	private boolean logHeaders;
+	private boolean useContentLength;
 	private String trustStoreLocation;
 	private String trustStorePassword;
 	@Value("${spring.application.name:-}")
@@ -27,7 +28,7 @@ public class ReactiveSpringLoggingAutoConfiguration {
 
 	@Bean
 	public ReactiveSpringLoggingFilter reactiveSpringLoggingFilter() {
-		return new ReactiveSpringLoggingFilter(generator(), ignorePatterns, logHeaders);
+		return new ReactiveSpringLoggingFilter(generator(), ignorePatterns, logHeaders, useContentLength);
 	}
 
 }
