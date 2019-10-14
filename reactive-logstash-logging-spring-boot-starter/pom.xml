@@ -5,7 +5,7 @@
 
 	<groupId>com.github.piomin</groupId>
 	<artifactId>reactive-logstash-logging-spring-boot-starter</artifactId>
-	<version>1.0.0.BUILD-SNAPSHOT</version>
+	<version>1.0.0.RELEASE</version>
 	<name>reactive-logstash-logging-spring-boot-starter</name>
 	<description>Library for HTTP logging with Spring Boot</description>
 	<url>https://github.com/piomin/spring-boot-logging</url>

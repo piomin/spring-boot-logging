@@ -3,11 +3,13 @@ package pl.piomin.logging.reactive.config;
 import org.springframework.beans.factory.annotation.Value;
 import pl.piomin.logging.reactive.filter.ReactiveSpringLoggingFilter;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pl.piomin.logging.reactive.util.UniqueIDGenerator;
 
 @Configuration
+@ConfigurationProperties(prefix = "logging.logstash")
 public class ReactiveSpringLoggingAutoConfiguration {
 
 	private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
