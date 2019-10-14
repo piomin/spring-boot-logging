@@ -51,7 +51,7 @@ public class ReactiveSpringLoggingFilter implements WebFilter {
 			ServerWebExchangeDecorator exchangeDecorator = new ServerWebExchangeDecorator(exchange) {
 				@Override
 				public ServerHttpRequest getRequest() {
-					return new RequestLoggingInterceptor(super.getRequest());
+					return new RequestLoggingInterceptor(super.getRequest(), logHeaders);
 				}
 
 				@Override
