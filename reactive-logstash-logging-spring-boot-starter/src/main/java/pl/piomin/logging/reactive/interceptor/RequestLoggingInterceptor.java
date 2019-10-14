@@ -19,8 +19,11 @@ public class RequestLoggingInterceptor extends ServerHttpRequestDecorator {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RequestLoggingInterceptor.class);
 
-	public RequestLoggingInterceptor(ServerHttpRequest delegate) {
+	private boolean logHeaders;
+
+	public RequestLoggingInterceptor(ServerHttpRequest delegate, boolean logHeaders) {
 		super(delegate);
+		this.logHeaders = logHeaders;
 	}
 
 	@Override
@@ -30,14 +33,21 @@ public class RequestLoggingInterceptor extends ServerHttpRequestDecorator {
 			try {
 				Channels.newChannel(baos).write(dataBuffer.asByteBuffer().asReadOnlyBuffer());
 				String body = IOUtils.toString(baos.toByteArray(), "UTF-8");
-				LOGGER.info("Request: method={}, uri={}, payload={}, audit={}", getDelegate().getMethod(),
-						getDelegate().getPath(), body, value("audit", true));
-			} catch (IOException e) {
+				if (logHeaders)
+					LOGGER.info("Request: method={}, uri={}, headers={}, payload={}, audit={}", getDelegate().getMethod(),
+							getDelegate().getPath(), getDelegate().getHeaders(), body, value("audit", true));
+				else
+					LOGGER.info("Request: method={}, uri={}, payload={}, audit={}", getDelegate().getMethod(),
+							getDelegate().getPath(), body, value("audit", true));
+			}
+			catch (IOException e) {
 				e.printStackTrace();
-			} finally {
+			}
+			finally {
 				try {
 					baos.close();
-				} catch (IOException e) {
+				}
+				catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
