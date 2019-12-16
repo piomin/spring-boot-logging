@@ -1,0 +1,4 @@
+pl\piomin\logging\config\SpringLoggingAutoConfiguration.class
+pl\piomin\logging\client\RestTemplateSetHeaderInterceptor.class
+pl\piomin\logging\util\UniqueIDGenerator.class
+pl\piomin\logging\filter\SpringLoggingFilter.class

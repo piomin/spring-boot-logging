@@ -1,0 +1,6 @@
+pl\piomin\logging\reactive\interceptor\ResponseLoggingInterceptor.class
+pl\piomin\logging\reactive\util\UniqueIDGenerator.class
+pl\piomin\logging\reactive\filter\ReactiveSpringLoggingFilter.class
+pl\piomin\logging\reactive\interceptor\RequestLoggingInterceptor.class
+pl\piomin\logging\reactive\config\ReactiveSpringLoggingAutoConfiguration.class
+pl\piomin\logging\reactive\filter\ReactiveSpringLoggingFilter$1.class

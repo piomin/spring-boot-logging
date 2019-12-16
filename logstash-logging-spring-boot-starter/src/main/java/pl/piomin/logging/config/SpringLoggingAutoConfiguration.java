@@ -1,11 +1,11 @@
 package pl.piomin.logging.config;
 
-import ch.qos.logback.classic.Logger;
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.core.net.ssl.KeyStoreFactoryBean;
-import ch.qos.logback.core.net.ssl.SSLConfiguration;
-import net.logstash.logback.appender.LogstashTcpSocketAppender;
-import net.logstash.logback.encoder.LogstashEncoder;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,14 +17,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
 
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.core.net.ssl.KeyStoreFactoryBean;
+import ch.qos.logback.core.net.ssl.SSLConfiguration;
+import net.logstash.logback.appender.LogstashTcpSocketAppender;
+import net.logstash.logback.encoder.LogstashEncoder;
 import pl.piomin.logging.client.RestTemplateSetHeaderInterceptor;
 import pl.piomin.logging.filter.SpringLoggingFilter;
 import pl.piomin.logging.util.UniqueIDGenerator;
-
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Configuration
 @ConfigurationProperties(prefix = "logging.logstash")
@@ -93,9 +94,7 @@ public class SpringLoggingAutoConfiguration {
 	@PostConstruct
 	public void init() {
 		template.ifPresent(restTemplate -> {
-			List<ClientHttpRequestInterceptor> interceptorList = new ArrayList<ClientHttpRequestInterceptor>();
-			interceptorList.add(new RestTemplateSetHeaderInterceptor());
-			restTemplate.setInterceptors(interceptorList);
+			restTemplate.getInterceptors().add(new RestTemplateSetHeaderInterceptor() );
 		});
 	}
 

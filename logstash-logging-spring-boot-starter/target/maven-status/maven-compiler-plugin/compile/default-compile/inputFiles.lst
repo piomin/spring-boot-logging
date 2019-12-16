@@ -1,0 +1,4 @@
+C:\_workspace\spring-boot-logging\logstash-logging-spring-boot-starter\src\main\java\pl\piomin\logging\config\SpringLoggingAutoConfiguration.java
+C:\_workspace\spring-boot-logging\logstash-logging-spring-boot-starter\src\main\java\pl\piomin\logging\filter\SpringLoggingFilter.java
+C:\_workspace\spring-boot-logging\logstash-logging-spring-boot-starter\src\main\java\pl\piomin\logging\util\UniqueIDGenerator.java
+C:\_workspace\spring-boot-logging\logstash-logging-spring-boot-starter\src\main\java\pl\piomin\logging\client\RestTemplateSetHeaderInterceptor.java
