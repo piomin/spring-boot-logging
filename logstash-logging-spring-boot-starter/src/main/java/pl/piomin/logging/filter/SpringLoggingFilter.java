@@ -45,7 +45,11 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
 
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
-		if (ignorePatterns != null && request.getRequestURI().matches(ignorePatterns)) {
+		/**
+		 * We don't need to wrap the servlet callin case the logger is not enable on the correct level 
+		 * or in case ignore patterns are defined.
+		 */
+		if ( !LOGGER.isInfoEnabled() || (ignorePatterns != null && request.getRequestURI().matches(ignorePatterns)) ) {
 			chain.doFilter(request, response);
 		} else {
 			generator.generateAndSetMDC(request);
@@ -76,8 +80,10 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
 				logResponse(startTime, wrappedResponse, 500);
 				throw e;
 			}
-			logResponse(startTime, wrappedResponse, wrappedResponse.getStatus());
+			/* we need to write the character encoding otherwise the data is not correctly send to the other side */
+			response.setCharacterEncoding(wrappedResponse.getCharacterEncoding());
 			wrappedResponse.copyBodyToResponse();
+			logResponse(startTime, wrappedResponse, wrappedResponse.getStatus());
 		}
 	}
 
