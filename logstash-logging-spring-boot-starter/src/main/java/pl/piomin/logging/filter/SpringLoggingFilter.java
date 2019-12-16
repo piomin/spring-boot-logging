@@ -46,11 +46,12 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
 			throws ServletException, IOException {
 		/**
-		 * We don't need to wrap the servlet callin case the logger is not enable on the correct level 
+		 * We don't need to wrap the servlet call in case the logger is not enable on the correct level 
 		 * or in case ignore patterns are defined.
 		 */
 		if ( !LOGGER.isInfoEnabled() || (ignorePatterns != null && request.getRequestURI().matches(ignorePatterns)) ) {
 			chain.doFilter(request, response);
+			
 		} else {
 			generator.generateAndSetMDC(request);
 			try {
