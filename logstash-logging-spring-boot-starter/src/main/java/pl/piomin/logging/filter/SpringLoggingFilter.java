@@ -77,6 +77,7 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
 
     private void logResponse(long startTime, SpringResponseWrapper wrappedResponse, int overriddenStatus) throws IOException {
         final long duration = System.currentTimeMillis() - startTime;
+        wrappedResponse.setCharacterEncoding("UTF-8");
         if (logHeaders)
             LOGGER.info("Response({} ms): status={}, payload={}, headers={}, audit={}", value("X-Response-Time", duration),
                     value("X-Response-Status", overriddenStatus), IOUtils.toString(wrappedResponse.getContentAsByteArray(),
