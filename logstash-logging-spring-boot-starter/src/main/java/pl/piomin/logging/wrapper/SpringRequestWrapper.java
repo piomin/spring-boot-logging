@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class SpringRequestWrapper extends HttpServletRequestWrapper {
 
     public Map<String, String> getAllHeaders() {
         final Map<String, String> headers = new HashMap<>();
-        getHeaderNames().asIterator().forEachRemaining(it -> headers.put(it, getHeader(it)));
+        Collections.list(getHeaderNames()).forEach(it -> headers.put(it, getHeader(it)));
         return  headers;
     }
 }

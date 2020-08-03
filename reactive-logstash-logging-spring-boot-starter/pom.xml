@@ -27,7 +27,7 @@
 	</licenses>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 		<commons-io.version>2.6</commons-io.version>
 		<javax-servlet.version>4.0.1</javax-servlet.version>
 		<logstash-logback.version>5.3</logstash-logback.version>
@@ -112,7 +112,9 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.0</version>
 				<configuration>
-					<release>${java.version}</release>
+					<target>${java.version}</target>
+					<source>${java.version}</source>
+					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
 			<plugin>
