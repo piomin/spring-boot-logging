@@ -20,10 +20,12 @@ public class RequestLoggingInterceptor extends ServerHttpRequestDecorator {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RequestLoggingInterceptor.class);
 
 	private boolean logHeaders;
+	private String requestId;
 
-	public RequestLoggingInterceptor(ServerHttpRequest delegate, boolean logHeaders) {
+	public RequestLoggingInterceptor(ServerHttpRequest delegate, boolean logHeaders, String requestId) {
 		super(delegate);
 		this.logHeaders = logHeaders;
+		this.requestId = requestId;
 	}
 
 	@Override
@@ -34,10 +36,10 @@ public class RequestLoggingInterceptor extends ServerHttpRequestDecorator {
 				Channels.newChannel(baos).write(dataBuffer.asByteBuffer().asReadOnlyBuffer());
 				String body = IOUtils.toString(baos.toByteArray(), "UTF-8");
 				if (logHeaders)
-					LOGGER.info("Request: method={}, uri={}, headers={}, payload={}, audit={}", getDelegate().getMethod(),
+					LOGGER.info("Request: id={}, method={}, uri={}, headers={}, payload={}, audit={}", requestId, getDelegate().getMethod(),
 							getDelegate().getPath(), getDelegate().getHeaders(), body, value("audit", true));
 				else
-					LOGGER.info("Request: method={}, uri={}, payload={}, audit={}", getDelegate().getMethod(),
+					LOGGER.info("Request: id={}, method={}, uri={}, payload={}, audit={}", requestId, getDelegate().getMethod(),
 							getDelegate().getPath(), body, value("audit", true));
 			}
 			catch (IOException e) {

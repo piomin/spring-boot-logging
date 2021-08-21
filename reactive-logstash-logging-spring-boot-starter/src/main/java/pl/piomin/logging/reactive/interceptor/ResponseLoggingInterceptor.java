@@ -22,11 +22,13 @@ public class ResponseLoggingInterceptor extends ServerHttpResponseDecorator {
 
 	private long startTime;
 	private boolean logHeaders;
+	private String requestId;
 
-	public ResponseLoggingInterceptor(ServerHttpResponse delegate, long startTime, boolean logHeaders) {
+	public ResponseLoggingInterceptor(ServerHttpResponse delegate, long startTime, boolean logHeaders, String requestId) {
 		super(delegate);
 		this.startTime = startTime;
 		this.logHeaders = logHeaders;
+		this.requestId = requestId;
 	}
 
 	@Override
@@ -38,10 +40,10 @@ public class ResponseLoggingInterceptor extends ServerHttpResponseDecorator {
 				Channels.newChannel(baos).write(dataBuffer.asByteBuffer().asReadOnlyBuffer());
 				String bodyRes = IOUtils.toString(baos.toByteArray(), "UTF-8");
 				if (logHeaders)
-					LOGGER.info("Response({} ms): status={}, payload={}, audit={}", value("X-Response-Time", System.currentTimeMillis() - startTime),
-							value("X-Response-Status", getStatusCode().value()), bodyRes, value("audit", true));
+					LOGGER.info("Response({} ms): id={}, status={}, headers={}, payload={}, audit={}", value("X-Response-Time", System.currentTimeMillis() - startTime),requestId,
+							value("X-Response-Status", getStatusCode().value()), getDelegate().getHeaders() ,bodyRes, value("audit", true));
 				else
-					LOGGER.info("Response({} ms): status={}, payload={}, audit={}", value("X-Response-Time", System.currentTimeMillis() - startTime),
+					LOGGER.info("Response({} ms): id={}, status={}, payload={}, audit={}", value("X-Response-Time", System.currentTimeMillis() - startTime),requestId,
 							value("X-Response-Status", getStatusCode().value()), bodyRes, value("audit", true));
 			} catch (IOException e) {
 				e.printStackTrace();
