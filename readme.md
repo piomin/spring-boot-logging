@@ -24,13 +24,12 @@ In short, let’s begin from a brief review of main features provided by logstas
 3. It generates and propagates correlationId for downstream services calling with Spring RestTemplate or OpenFeign
 4. It is auto-configurable Spring Boot library – you don’t have to do anything more than including it as a dependency to your application to make it work
 
-## Getting started          
-The library is published on Maven Central. Current version is `1.2.2.RELEASE`
+## Getting started
 ```
 <dependency>
   <groupId>com.github.piomin</groupId>
   <artifactId>logstash-logging-spring-boot-starter</artifactId>
-  <version>1.2.2.RELEASE</version>
+  <version>1.3.1.RELEASE</version>
 </dependency>
 ```
 
@@ -39,4 +38,38 @@ By default the library is enabled, but tries to locate Logback configuration ins
 logging.logstash:
   enabled: true
   url: 192.168.99.100:5000
+```
+
+## Manual add jar to pom.xml
+
+Add `reactive-logstash-logging-spring-boot-starter-1.3.1.RELEASE.pom` to `${basedir}/dependencies`
+
+Add `pom.xml` to `${basedir}/dependencies` and rename to `reactive-logstash-logging-spring-boot-starter-1.3.1.RELEASE.pom`
+
+Add this script to `pom.xml` in plugins section.
+
+```
+<plugin>
+  <groupId>org.apache.maven.plugins</groupId>
+  <artifactId>maven-install-plugin</artifactId>
+  <version>2.5.1</version>
+  <configuration>
+      <groupId>com.github.piomin</groupId>
+      <artifactId>reactive-logstash-logging-spring-boot-starter</artifactId>
+      <version>1.3.1.RELEASE</version>
+      <packaging>jar</packaging>
+      <file>${basedir}/dependencies/reactive-logstash-logging-spring-boot-starter-1.3.1.RELEASE.jar</file>
+      <generatePom>false</generatePom>
+      <pomFile>${basedir}/dependencies/reactive-logstash-logging-spring-boot-starter-1.3.1.RELEASE.pom</pomFile>
+  </configuration>
+  <executions>
+      <execution>
+      <id>install-jar-lib</id>
+      <goals>
+        <goal>install-file</goal>
+      </goals>
+      <phase>validate</phase>
+      </execution>
+  </executions>
+  </plugin>
 ```
