@@ -1,6 +1,6 @@
 ## Logging with Spring Boot and Elastic Stack  [![Twitter](https://img.shields.io/twitter/follow/piotr_minkowski.svg?style=social&logo=twitter&label=Follow%20Me)](https://twitter.com/piotr_minkowski)
 
-![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.piomin/logstash-logging-spring-boot-starter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.piomin/logstash-logging-spring-boot-starter)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.piomin/logstash-logging-spring-boot-starter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.piomin/logstash-logging-spring-boot-starter)
 [![CircleCI](https://circleci.com/gh/piomin/spring-boot-logging.svg?style=svg)](https://circleci.com/gh/piomin/spring-boot-logging)
 [![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-black.svg)](https://sonarcloud.io/dashboard?id=piomin_spring-boot-logging)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=piomin_spring-boot-logging&metric=bugs)](https://sonarcloud.io/dashboard?id=piomin_spring-boot-logging)
