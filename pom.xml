@@ -17,7 +17,7 @@
 		<logstash-logback.version>5.3</logstash-logback.version>
 		<spring.version>5.2.3.RELEASE</spring.version>
 		<spring.boot.version>2.1.4.RELEASE</spring.boot.version>
-		<slf4j.version>1.7.26</slf4j.version>
+		<slf4j.version>1.7.36</slf4j.version>
 
 		<sonar.projectKey>piomin_spring-boot-logging</sonar.projectKey>
 		<sonar.organization>piomin</sonar.organization>
