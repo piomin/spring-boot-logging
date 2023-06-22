@@ -7,8 +7,8 @@ import ch.qos.logback.core.net.ssl.SSLConfiguration;
 import net.logstash.logback.appender.LogstashTcpSocketAppender;
 import net.logstash.logback.encoder.LogstashEncoder;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,15 +16,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestTemplate;
-
 import pl.piomin.logging.client.RestTemplateSetHeaderInterceptor;
 import pl.piomin.logging.filter.SpringLoggingFilter;
 import pl.piomin.logging.util.UniqueIDGenerator;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Configuration
 @ConfigurationProperties(prefix = "logging.logstash")
@@ -39,8 +36,6 @@ public class SpringLoggingAutoConfiguration {
 	private String trustStorePassword;
 	@Value("${spring.application.name:-}")
 	String name;
-	@Autowired(required = false)
-	Optional<RestTemplate> template;
 
 	@Bean
 	public UniqueIDGenerator generator() {
@@ -53,9 +48,14 @@ public class SpringLoggingAutoConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnMissingBean(RestTemplate.class)
+	@ConditionalOnMissingBean
 	public RestTemplate restTemplate() {
-		RestTemplate restTemplate = new RestTemplate();
+		return new RestTemplate();
+	}
+
+	@Bean
+	@ConditionalOnBean
+	public RestTemplate existingRestTemplate(final RestTemplate restTemplate) {
 		List<ClientHttpRequestInterceptor> interceptorList = new ArrayList<ClientHttpRequestInterceptor>();
 		interceptorList.add(new RestTemplateSetHeaderInterceptor());
 		restTemplate.setInterceptors(interceptorList);
@@ -88,15 +88,6 @@ public class SpringLoggingAutoConfiguration {
 		logstashTcpSocketAppender.start();
 		loggerContext.getLogger(Logger.ROOT_LOGGER_NAME).addAppender(logstashTcpSocketAppender);
 		return logstashTcpSocketAppender;
-	}
-
-	@PostConstruct
-	public void init() {
-		template.ifPresent(restTemplate -> {
-			List<ClientHttpRequestInterceptor> interceptorList = new ArrayList<ClientHttpRequestInterceptor>();
-			interceptorList.add(new RestTemplateSetHeaderInterceptor());
-			restTemplate.setInterceptors(interceptorList);
-		});
 	}
 
 	public String getUrl() {
