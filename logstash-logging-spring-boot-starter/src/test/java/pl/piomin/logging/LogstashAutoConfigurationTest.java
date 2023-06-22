@@ -1,18 +1,15 @@
 package pl.piomin.logging;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 import pl.piomin.logging.config.SpringLoggingAutoConfiguration;
 import pl.piomin.logging.filter.SpringLoggingFilter;
 import pl.piomin.logging.util.UniqueIDGenerator;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(classes = SpringLoggingAutoConfiguration.class)
 public class LogstashAutoConfigurationTest {
 
