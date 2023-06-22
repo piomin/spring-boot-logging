@@ -11,6 +11,10 @@
 
     <artifactId>reactive-logging-spring-tests</artifactId>
 
+    <properties>
+        <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
