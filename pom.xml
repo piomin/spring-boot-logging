@@ -4,7 +4,7 @@
 
 	<groupId>com.github.piomin</groupId>
 	<artifactId>spring-boot-logging</artifactId>
-	<version>1.3.0.RELEASE</version>
+	<version>1.4.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>spring-boot-logging</name>
 	<description>Library for HTTP logging with Spring Boot</description>
