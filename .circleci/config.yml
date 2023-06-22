@@ -23,5 +23,6 @@ workflows:
     jobs:
       - maven/test:
           executor: jdk
+          verify_dependencies: false
       - build:
           context: SonarCloud
