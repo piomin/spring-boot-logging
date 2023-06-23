@@ -27,12 +27,13 @@ In short, let’s begin from a brief review of main features provided by logstas
 4. It is auto-configurable Spring Boot library – you don’t have to do anything more than including it as a dependency to your application to make it work
 
 ## Getting started
+The current version of library is `1.4.1`.\
 For logging with Spring WebMvc:
 ```
 <dependency>
   <groupId>com.github.piomin</groupId>
   <artifactId>logstash-logging-spring-boot-starter</artifactId>
-  <version>1.4.0</version>
+  <version>1.4.1</version>
 </dependency>
 ```
 
@@ -41,11 +42,11 @@ For logging with Spring WebFlux:
 <dependency>
   <groupId>com.github.piomin</groupId>
   <artifactId>reactive-logstash-logging-spring-boot-starter</artifactId>
-  <version>1.4.0</version>
+  <version>1.4.1</version>
 </dependency>
 ```
 
-By default the library is enabled, but tries to locate Logback configuration inside your application to settings for Logstash appender. If such appender won’t be found, the library uses Spring Boot default logging configuration, which does not include Logstash appender. To force it use auto-configured appender definition inside library we have to set property logging.logstash.enabled to `true`.
+By default, the library is enabled, but tries to locate Logback configuration inside your application to settings for Logstash appender. If such appender won’t be found, the library uses Spring Boot default logging configuration, which does not include Logstash appender. To force it use auto-configured appender definition inside library we have to set property logging.logstash.enabled to `true`.
 ```
 logging.logstash:
   enabled: true
