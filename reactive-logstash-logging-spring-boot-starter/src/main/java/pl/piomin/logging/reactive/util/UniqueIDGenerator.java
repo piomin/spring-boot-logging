@@ -8,23 +8,28 @@ import java.util.UUID;
 
 public class UniqueIDGenerator {
 
-    private static final String REQUEST_ID_HEADER_NAME = "X-Request-ID";
-    private static final String CORRELATION_ID_HEADER_NAME = "X-Correlation-ID";
+    private final String requestIdHeaderName;
+    private final String correlationIdHeaderName;
+
+    public UniqueIDGenerator(String requestIdHeaderName, String correlationIdHeaderName) {
+        this.requestIdHeaderName = requestIdHeaderName;
+        this.correlationIdHeaderName = correlationIdHeaderName;
+    }
 
     public void generateAndSetMDC(ServerHttpRequest request) {
         MDC.clear();
 
-        List<String> requestIds = request.getHeaders().get(REQUEST_ID_HEADER_NAME);
+        List<String> requestIds = request.getHeaders().get(requestIdHeaderName);
         if (requestIds == null)
-            MDC.put(REQUEST_ID_HEADER_NAME, UUID.randomUUID().toString());
+            MDC.put(requestIdHeaderName, UUID.randomUUID().toString());
         else
-            MDC.put(REQUEST_ID_HEADER_NAME, requestIds.get(0));
+            MDC.put(requestIdHeaderName, requestIds.get(0));
 
-        List<String> correlationIds = request.getHeaders().get(CORRELATION_ID_HEADER_NAME);
+        List<String> correlationIds = request.getHeaders().get(requestIdHeaderName);
         if (correlationIds == null)
-            MDC.put(CORRELATION_ID_HEADER_NAME, UUID.randomUUID().toString());
+            MDC.put(requestIdHeaderName, UUID.randomUUID().toString());
         else
-            MDC.put(CORRELATION_ID_HEADER_NAME, correlationIds.get(0));
+            MDC.put(requestIdHeaderName, correlationIds.get(0));
     }
 
 }

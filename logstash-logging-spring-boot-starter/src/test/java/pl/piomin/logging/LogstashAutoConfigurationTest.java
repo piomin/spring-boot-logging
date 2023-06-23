@@ -20,13 +20,6 @@ public class LogstashAutoConfigurationTest {
     @Autowired
     RestTemplate restTemplate;
 
-    // TODO - enable after springboot update
-//    public LogstashAutoConfigurationTest(UniqueIDGenerator generator, SpringLoggingFilter loggingFilter, RestTemplate restTemplate) {
-//        this.generator = generator;
-//        this.loggingFilter = loggingFilter;
-//        this.restTemplate = restTemplate;
-//    }
-
     @Test
     public void startup() {
         assertNotNull(generator);

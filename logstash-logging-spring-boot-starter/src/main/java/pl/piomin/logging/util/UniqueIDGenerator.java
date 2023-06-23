@@ -7,20 +7,25 @@ import java.util.UUID;
 
 public class UniqueIDGenerator {
 
-    private static final String REQUEST_ID_HEADER_NAME = "X-Request-ID";
-    private static final String CORRELATION_ID_HEADER_NAME = "X-Correlation-ID";
+    private final String requestIdHeaderName;
+    private final String correlationIdHeaderName;
+
+    public UniqueIDGenerator(String requestIdHeaderName, String correlationIdHeaderName) {
+        this.requestIdHeaderName = requestIdHeaderName;
+        this.correlationIdHeaderName = correlationIdHeaderName;
+    }
 
     public void generateAndSetMDC(HttpServletRequest request) {
         MDC.clear();
-        String requestId = request.getHeader(REQUEST_ID_HEADER_NAME);
+        String requestId = request.getHeader(requestIdHeaderName);
         if (requestId == null)
             requestId = UUID.randomUUID().toString();
-        MDC.put(REQUEST_ID_HEADER_NAME, requestId);
+        MDC.put(requestIdHeaderName, requestId);
 
-        String correlationId = request.getHeader(CORRELATION_ID_HEADER_NAME);
+        String correlationId = request.getHeader(correlationIdHeaderName);
         if (correlationId == null)
             correlationId = UUID.randomUUID().toString();
-        MDC.put(CORRELATION_ID_HEADER_NAME, correlationId);
+        MDC.put(correlationIdHeaderName, correlationId);
     }
 
 }

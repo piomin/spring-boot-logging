@@ -27,11 +27,21 @@ In short, let’s begin from a brief review of main features provided by logstas
 4. It is auto-configurable Spring Boot library – you don’t have to do anything more than including it as a dependency to your application to make it work
 
 ## Getting started
+For logging with Spring WebMvc:
 ```
 <dependency>
   <groupId>com.github.piomin</groupId>
   <artifactId>logstash-logging-spring-boot-starter</artifactId>
-  <version>1.3.1.RELEASE</version>
+  <version>1.4.0</version>
+</dependency>
+```
+
+For logging with Spring WebFlux:
+```
+<dependency>
+  <groupId>com.github.piomin</groupId>
+  <artifactId>reactive-logstash-logging-spring-boot-starter</artifactId>
+  <version>1.4.0</version>
 </dependency>
 ```
 
@@ -44,9 +54,9 @@ logging.logstash:
 
 ## Manual add jar to pom.xml
 
-Add `reactive-logstash-logging-spring-boot-starter-1.3.1.RELEASE.pom` to `${basedir}/dependencies`
+Add `reactive-logstash-logging-spring-boot-starter-1.4.0.pom` to `${basedir}/dependencies`
 
-Add `pom.xml` to `${basedir}/dependencies` and rename to `reactive-logstash-logging-spring-boot-starter-1.3.1.RELEASE.pom`
+Add `pom.xml` to `${basedir}/dependencies` and rename to `reactive-logstash-logging-spring-boot-starter-1.4.0.RELEASE.pom`
 
 Add this script to `pom.xml` in plugins section.
 

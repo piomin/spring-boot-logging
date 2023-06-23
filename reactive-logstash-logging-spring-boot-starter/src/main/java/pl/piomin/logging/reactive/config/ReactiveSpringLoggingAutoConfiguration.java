@@ -20,100 +20,119 @@ import pl.piomin.logging.reactive.util.UniqueIDGenerator;
 @ConfigurationProperties(prefix = "logging.logstash")
 public class ReactiveSpringLoggingAutoConfiguration {
 
-	private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
+    private static final String LOGSTASH_APPENDER_NAME = "LOGSTASH";
 
-	private String url = "localhost:8500";
-	private String ignorePatterns;
-	private boolean logHeaders;
-	private boolean useContentLength = true;
-	private String trustStoreLocation;
-	private String trustStorePassword;
-	@Value("${spring.application.name:-}")
-	String name;
+    private String url = "localhost:8500";
+    private String ignorePatterns;
+    private boolean logHeaders;
+    private boolean useContentLength = true;
+    private String trustStoreLocation;
+    private String trustStorePassword;
+    private String requestIdHeaderName = "X-Request-ID";
+    private String correlationIdHeaderName = "X-Correlation-ID";
 
-	@Bean
-	public UniqueIDGenerator generator() {
-		return new UniqueIDGenerator();
-	}
+    @Value("${spring.application.name:-}")
+    String name;
 
-	@Bean
-	public ReactiveSpringLoggingFilter reactiveSpringLoggingFilter() {
-		return new ReactiveSpringLoggingFilter(generator(), ignorePatterns, logHeaders, useContentLength);
-	}
+    @Bean
+    public UniqueIDGenerator generator() {
+        return new UniqueIDGenerator(requestIdHeaderName, correlationIdHeaderName);
+    }
 
-	@Bean
-	@ConditionalOnProperty("logging.logstash.enabled")
-	public LogstashTcpSocketAppender logstashAppender() {
-		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-		LogstashTcpSocketAppender logstashTcpSocketAppender = new LogstashTcpSocketAppender();
-		logstashTcpSocketAppender.setName(LOGSTASH_APPENDER_NAME);
-		logstashTcpSocketAppender.setContext(loggerContext);
-		logstashTcpSocketAppender.addDestination(url);
-		if (trustStoreLocation != null) {
-			SSLConfiguration sslConfiguration = new SSLConfiguration();
-			KeyStoreFactoryBean factory = new KeyStoreFactoryBean();
-			factory.setLocation(trustStoreLocation);
-			if (trustStorePassword != null)
-				factory.setPassword(trustStorePassword);
-			sslConfiguration.setTrustStore(factory);
-			logstashTcpSocketAppender.setSsl(sslConfiguration);
-		}
-		LogstashEncoder encoder = new LogstashEncoder();
-		encoder.setContext(loggerContext);
-		encoder.setIncludeContext(true);
-		encoder.setCustomFields("{\"appname\":\"" + name + "\"}");
-		encoder.start();
-		logstashTcpSocketAppender.setEncoder(encoder);
-		logstashTcpSocketAppender.start();
-		loggerContext.getLogger(Logger.ROOT_LOGGER_NAME).addAppender(logstashTcpSocketAppender);
-		return logstashTcpSocketAppender;
-	}
+    @Bean
+    public ReactiveSpringLoggingFilter reactiveSpringLoggingFilter() {
+        return new ReactiveSpringLoggingFilter(generator(), ignorePatterns, logHeaders, useContentLength);
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    @Bean
+    @ConditionalOnProperty("logging.logstash.enabled")
+    public LogstashTcpSocketAppender logstashAppender() {
+        LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+        LogstashTcpSocketAppender logstashTcpSocketAppender = new LogstashTcpSocketAppender();
+        logstashTcpSocketAppender.setName(LOGSTASH_APPENDER_NAME);
+        logstashTcpSocketAppender.setContext(loggerContext);
+        logstashTcpSocketAppender.addDestination(url);
+        if (trustStoreLocation != null) {
+            SSLConfiguration sslConfiguration = new SSLConfiguration();
+            KeyStoreFactoryBean factory = new KeyStoreFactoryBean();
+            factory.setLocation(trustStoreLocation);
+            if (trustStorePassword != null)
+                factory.setPassword(trustStorePassword);
+            sslConfiguration.setTrustStore(factory);
+            logstashTcpSocketAppender.setSsl(sslConfiguration);
+        }
+        LogstashEncoder encoder = new LogstashEncoder();
+        encoder.setContext(loggerContext);
+        encoder.setIncludeContext(true);
+        encoder.setCustomFields("{\"appname\":\"" + name + "\"}");
+        encoder.start();
+        logstashTcpSocketAppender.setEncoder(encoder);
+        logstashTcpSocketAppender.start();
+        loggerContext.getLogger(Logger.ROOT_LOGGER_NAME).addAppender(logstashTcpSocketAppender);
+        return logstashTcpSocketAppender;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public String getIgnorePatterns() {
-		return ignorePatterns;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public void setIgnorePatterns(String ignorePatterns) {
-		this.ignorePatterns = ignorePatterns;
-	}
+    public String getIgnorePatterns() {
+        return ignorePatterns;
+    }
 
-	public boolean isLogHeaders() {
-		return logHeaders;
-	}
+    public void setIgnorePatterns(String ignorePatterns) {
+        this.ignorePatterns = ignorePatterns;
+    }
 
-	public void setLogHeaders(boolean logHeaders) {
-		this.logHeaders = logHeaders;
-	}
+    public boolean isLogHeaders() {
+        return logHeaders;
+    }
 
-	public boolean isUseContentLength() {
-		return useContentLength;
-	}
+    public void setLogHeaders(boolean logHeaders) {
+        this.logHeaders = logHeaders;
+    }
 
-	public void setUseContentLength(boolean useContentLength) {
-		this.useContentLength = useContentLength;
-	}
+    public boolean isUseContentLength() {
+        return useContentLength;
+    }
 
-	public String getTrustStoreLocation() {
-		return trustStoreLocation;
-	}
+    public void setUseContentLength(boolean useContentLength) {
+        this.useContentLength = useContentLength;
+    }
 
-	public void setTrustStoreLocation(String trustStoreLocation) {
-		this.trustStoreLocation = trustStoreLocation;
-	}
+    public String getTrustStoreLocation() {
+        return trustStoreLocation;
+    }
 
-	public String getTrustStorePassword() {
-		return trustStorePassword;
-	}
+    public void setTrustStoreLocation(String trustStoreLocation) {
+        this.trustStoreLocation = trustStoreLocation;
+    }
 
-	public void setTrustStorePassword(String trustStorePassword) {
-		this.trustStorePassword = trustStorePassword;
-	}
+    public String getTrustStorePassword() {
+        return trustStorePassword;
+    }
+
+    public void setTrustStorePassword(String trustStorePassword) {
+        this.trustStorePassword = trustStorePassword;
+    }
+
+    public String getRequestIdHeaderName() {
+        return requestIdHeaderName;
+    }
+
+    public void setRequestIdHeaderName(String requestIdHeaderName) {
+        this.requestIdHeaderName = requestIdHeaderName;
+    }
+
+    public String getCorrelationIdHeaderName() {
+        return correlationIdHeaderName;
+    }
+
+    public void setCorrelationIdHeaderName(String correlationIdHeaderName) {
+        this.correlationIdHeaderName = correlationIdHeaderName;
+    }
 }

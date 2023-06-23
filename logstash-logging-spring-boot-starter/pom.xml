@@ -2,13 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>com.github.piomin</groupId>
-		<artifactId>spring-boot-logging</artifactId>
-		<version>1.4.1-SNAPSHOT</version>
-	</parent>
-
+	<groupId>com.github.piomin</groupId>
 	<artifactId>logstash-logging-spring-boot-starter</artifactId>
+	<version>1.4.1</version>
+
 	<name>logstash-logging-spring-boot-starter</name>
 	<description>Library for HTTP logging with Spring Boot</description>
 	<url>https://github.com/piomin/spring-boot-logging</url>
@@ -30,6 +27,13 @@
 	</licenses>
 
 	<properties>
+		<java.version>11</java.version>
+		<commons-io.version>2.13.0</commons-io.version>
+		<javax-servlet.version>4.0.1</javax-servlet.version>
+		<logstash-logback.version>5.3</logstash-logback.version>
+		<spring.version>5.3.28</spring.version>
+		<spring.boot.version>2.7.13</spring.boot.version>
+		<slf4j.version>1.7.36</slf4j.version>
 		<sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
 	</properties>
 
