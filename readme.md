@@ -55,7 +55,7 @@ logging.logstash:
 
 ## Manual add jar to pom.xml
 
-Add `reactive-logstash-logging-spring-boot-starter-1.4.0.pom` to `${basedir}/dependencies`
+Add `reactive-logstash-logging-spring-boot-starter-1.4.1.pom` to `${basedir}/dependencies`
 
 Add `pom.xml` to `${basedir}/dependencies` and rename to `reactive-logstash-logging-spring-boot-starter-1.4.0.RELEASE.pom`
 
@@ -69,7 +69,7 @@ Add this script to `pom.xml` in plugins section.
   <configuration>
       <groupId>com.github.piomin</groupId>
       <artifactId>reactive-logstash-logging-spring-boot-starter</artifactId>
-      <version>1.3.1.RELEASE</version>
+      <version>1.4.1</version>
       <packaging>jar</packaging>
       <file>${basedir}/dependencies/reactive-logstash-logging-spring-boot-starter-1.3.1.RELEASE.jar</file>
       <generatePom>false</generatePom>
