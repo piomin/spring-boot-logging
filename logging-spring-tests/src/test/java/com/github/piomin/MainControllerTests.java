@@ -22,8 +22,22 @@ public class MainControllerTests {
     }
 
     @Test
+    public void findByIdReqParam() {
+        String res = restTemplate.getForObject("/test/req-param?id={id}", String.class, 1);
+        assertNotNull(res);
+        assertEquals("Hello-1", res);
+    }
+
+    @Test
     public void postById() {
         String res = restTemplate.postForObject("/test", 1, String.class);
+        assertNotNull(res);
+        assertEquals("Hello-1", res);
+    }
+
+    @Test
+    public void postByIdReqParam() {
+        String res = restTemplate.postForObject("/test/req-param?id={id}", null, String.class, 1);
         assertNotNull(res);
         assertEquals("Hello-1", res);
     }

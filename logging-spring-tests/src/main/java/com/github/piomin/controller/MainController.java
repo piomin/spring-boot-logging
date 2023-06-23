@@ -15,4 +15,14 @@ public class MainController {
     public String postWithId(@RequestBody Integer id) {
         return "Hello-" + id;
     }
+
+    @GetMapping("/req-param")
+    public String findByIdRequest(@RequestParam Integer id) {
+        return "Hello-" + id;
+    }
+
+    @PostMapping("/req-param")
+    public String postWithIdRequest(@RequestParam Integer id) {
+        return "Hello-" + id;
+    }
 }
