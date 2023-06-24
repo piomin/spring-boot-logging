@@ -2,7 +2,7 @@ package pl.piomin.logging.util;
 
 import org.slf4j.MDC;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 public class UniqueIDGenerator {
