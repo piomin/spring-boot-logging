@@ -2,6 +2,9 @@ package com.github.piomin.controller;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/test")
@@ -26,4 +29,10 @@ public class MainController {
     public String postWithIdRequest(@RequestParam Integer id) {
         return "Hello-" + id;
     }
+
+    @PostMapping(value = "/req-file")
+    public String processFile(@RequestParam("file") MultipartFile file) throws IOException {
+        return file.getOriginalFilename() + file.getBytes().length;
+    }
+
 }
