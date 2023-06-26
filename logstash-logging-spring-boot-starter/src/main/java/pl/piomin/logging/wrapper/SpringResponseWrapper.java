@@ -12,65 +12,63 @@ import jakarta.servlet.http.HttpServletResponseWrapper;
 
 public class SpringResponseWrapper extends HttpServletResponseWrapper {
 
-	private ServletOutputStream outputStream;
-	private PrintWriter writer;
-	private ServletOutputStreamWrapper copier;
+    private ServletOutputStream outputStream;
+    private PrintWriter writer;
+    private ServletOutputStreamWrapper copier;
 
-	public SpringResponseWrapper(HttpServletResponse response) throws IOException {
-		super(response);
-	}
+    public SpringResponseWrapper(HttpServletResponse response) throws IOException {
+        super(response);
+    }
 
-	@Override
-	public ServletOutputStream getOutputStream() throws IOException {
-		if (writer != null) {
-			throw new IllegalStateException("getWriter() has already been called on this response.");
-		}
+    @Override
+    public ServletOutputStream getOutputStream() throws IOException {
+        if (writer != null) {
+            throw new IllegalStateException("getWriter() has already been called on this response.");
+        }
 
-		if (outputStream == null) {
-			outputStream = getResponse().getOutputStream();
-			copier = new ServletOutputStreamWrapper(outputStream);
-		}
+        if (outputStream == null) {
+            outputStream = getResponse().getOutputStream();
+            copier = new ServletOutputStreamWrapper(outputStream);
+        }
 
-		return copier;
-	}
+        return copier;
+    }
 
-	@Override
-	public PrintWriter getWriter() throws IOException {
-		if (outputStream != null) {
-			throw new IllegalStateException("getOutputStream() has already been called on this response.");
-		}
+    @Override
+    public PrintWriter getWriter() throws IOException {
+        if (outputStream != null) {
+            throw new IllegalStateException("getOutputStream() has already been called on this response.");
+        }
 
-		if (writer == null) {
-			copier = new ServletOutputStreamWrapper(getResponse().getOutputStream());
-			writer = new PrintWriter(new OutputStreamWriter(copier, getResponse().getCharacterEncoding()), true);
-		}
+        if (writer == null) {
+            copier = new ServletOutputStreamWrapper(getResponse().getOutputStream());
+            writer = new PrintWriter(new OutputStreamWriter(copier, getResponse().getCharacterEncoding()), true);
+        }
 
-		return writer;
-	}
+        return writer;
+    }
 
-	@Override
-	public void flushBuffer() throws IOException {
-		if (writer != null) {
-			writer.flush();
-		}
-		else if (outputStream != null) {
-			copier.flush();
-		}
-	}
+    @Override
+    public void flushBuffer() throws IOException {
+        if (writer != null) {
+            writer.flush();
+        } else if (outputStream != null) {
+            copier.flush();
+        }
+    }
 
-	public byte[] getContentAsByteArray() {
-		if (copier != null) {
-			return copier.getCopy();
-		}
-		else {
-			return new byte[0];
-		}
-	}
+    public byte[] getContentAsByteArray() {
+        if (copier != null) {
+            return copier.getCopy();
+        } else {
+            return new byte[0];
+        }
+    }
 
-	public Map<String, String> getAllHeaders() {
-		final Map<String, String> headers = new HashMap<>();
-		getHeaderNames().forEach(it -> headers.put(it, getHeader(it)));
-		return  headers;
-	}
+    public Map<String, String> getAllHeaders() {
+        final Map<String, String> headers = new HashMap<>();
+        getHeaderNames().forEach(it -> headers.put(it, getHeader(it)));
+        return headers;
+    }
 
 }

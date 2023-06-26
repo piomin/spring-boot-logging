@@ -15,14 +15,22 @@ import java.util.Map;
 public class SpringRequestWrapper extends HttpServletRequestWrapper {
 
     private byte[] body;
+    private Map<String, String[]> parameterMap;
 
     public SpringRequestWrapper(HttpServletRequest request) {
         super(request);
+        parameterMap = request.getParameterMap();
+
         try {
             body = IOUtils.toByteArray(request.getInputStream());
         } catch (IOException ex) {
             body = new byte[0];
         }
+    }
+
+    @Override
+    public Map<String, String[]> getParameterMap() {
+        return parameterMap;
     }
 
     @Override

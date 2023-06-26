@@ -1,5 +1,6 @@
 package com.github.piomin.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +22,7 @@ public class MainController {
         return "Hello-" + id;
     }
 
-    @PostMapping("/req-param")
+    @PostMapping(value = "/req-param", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public String postWithIdRequest(@RequestParam Integer id) {
         return "Hello-" + id;
     }

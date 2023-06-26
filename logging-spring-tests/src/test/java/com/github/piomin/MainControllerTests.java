@@ -4,8 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import pl.piomin.logging.config.SpringLoggingAutoConfiguration;
-import pl.piomin.logging.filter.SpringLoggingFilter;
+import org.springframework.http.*;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,9 +16,6 @@ public class MainControllerTests {
 
     @Autowired
     TestRestTemplate restTemplate;
-
-    @Autowired
-    SpringLoggingAutoConfiguration c;
 
     @Test
     public void findById() {
@@ -42,8 +40,17 @@ public class MainControllerTests {
 
     @Test
     public void postByIdReqParam() {
-        String res = restTemplate.postForObject("/test/req-param?id={id}", null, String.class, 1);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, Integer> map = new LinkedMultiValueMap<>();
+        map.add("id", 1);
+        HttpEntity<MultiValueMap<String, Integer>> entity = new HttpEntity<>(map, headers);
+
+        ResponseEntity<String> res = restTemplate.exchange("/test/req-param", HttpMethod.POST, entity, String.class);
+//        String res = restTemplate.postForObject("/test/req-param", null, String.class, 1);
         assertNotNull(res);
-        assertEquals("Hello-1", res);
+        assertNotNull(res.getBody());
+        assertEquals("Hello-1", res.getBody());
     }
 }
