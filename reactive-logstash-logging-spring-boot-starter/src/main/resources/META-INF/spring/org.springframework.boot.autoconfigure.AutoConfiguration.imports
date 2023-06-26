@@ -1,2 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 pl.piomin.logging.reactive.config.ReactiveSpringLoggingAutoConfiguration

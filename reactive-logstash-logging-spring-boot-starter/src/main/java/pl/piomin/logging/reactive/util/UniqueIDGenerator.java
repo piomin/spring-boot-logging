@@ -17,19 +17,17 @@ public class UniqueIDGenerator {
     }
 
     public void generateAndSetMDC(ServerHttpRequest request) {
-        MDC.clear();
-
         List<String> requestIds = request.getHeaders().get(requestIdHeaderName);
         if (requestIds == null)
             MDC.put(requestIdHeaderName, UUID.randomUUID().toString());
         else
             MDC.put(requestIdHeaderName, requestIds.get(0));
 
-        List<String> correlationIds = request.getHeaders().get(requestIdHeaderName);
+        List<String> correlationIds = request.getHeaders().get(correlationIdHeaderName);
         if (correlationIds == null)
-            MDC.put(requestIdHeaderName, UUID.randomUUID().toString());
+            MDC.put(correlationIdHeaderName, UUID.randomUUID().toString());
         else
-            MDC.put(requestIdHeaderName, correlationIds.get(0));
+            MDC.put(correlationIdHeaderName, correlationIds.get(0));
     }
 
 }

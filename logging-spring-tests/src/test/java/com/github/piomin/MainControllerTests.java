@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import pl.piomin.logging.config.SpringLoggingAutoConfiguration;
+import pl.piomin.logging.filter.SpringLoggingFilter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -13,6 +15,9 @@ public class MainControllerTests {
 
     @Autowired
     TestRestTemplate restTemplate;
+
+    @Autowired
+    SpringLoggingAutoConfiguration c;
 
     @Test
     public void findById() {
