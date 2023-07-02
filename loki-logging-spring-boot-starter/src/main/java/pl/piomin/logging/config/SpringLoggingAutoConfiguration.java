@@ -26,7 +26,7 @@ public class SpringLoggingAutoConfiguration {
 
     private static final String LOKI_APPENDER_NAME = "LOKI";
 
-    private String url = "localhost:8500";
+    private String url = "http://localhost:3100/loki/api/v1/push";
     private String ignorePatterns;
     private boolean logHeaders;
     private String trustStoreLocation;
