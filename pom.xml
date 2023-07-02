@@ -31,6 +31,7 @@
         <module>reactive-logstash-logging-spring-boot-starter</module>
         <module>logging-spring-tests</module>
         <module>reactive-logging-spring-tests</module>
+        <module>loki-logging-spring-boot-starter</module>
     </modules>
 
 </project>
