@@ -78,6 +78,18 @@ public class SpringLoggingAutoConfiguration {
         label.setReadMarkers(true);
         label.setPattern("app=" + name + ",host=${HOSTNAME},level=%level");
         encoder.setLabel(label);
+        encoder.setSortByTime(true);
+        AbstractLoki4jEncoder.MessageCfg msg = new AbstractLoki4jEncoder.MessageCfg();
+        msg.setPattern("""
+                {
+                   "level":"%level",
+                   "class":"%logger{36}",
+                   "thread":"%thread",
+                   "message": "%message",
+                   "requestId": "%X{X-Request-ID}"
+                }
+                """);
+        encoder.setMessage(msg);
         encoder.start();
         loki4jAppender.setFormat(encoder);
         loki4jAppender.start();
