@@ -63,7 +63,7 @@ public class SpringLoggingAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnProperty("logging.loki.enabled")
+    @ConditionalOnProperty(value = "logging.loki.enabled", matchIfMissing = true, havingValue = "true")
     public Loki4jAppender lokiAppender() {
         LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
         Loki4jAppender loki4jAppender = new Loki4jAppender();
@@ -81,13 +81,7 @@ public class SpringLoggingAutoConfiguration {
         encoder.setSortByTime(true);
         AbstractLoki4jEncoder.MessageCfg msg = new AbstractLoki4jEncoder.MessageCfg();
         msg.setPattern("""
-                {
-                   "level":"%level",
-                   "class":"%logger{36}",
-                   "thread":"%thread",
-                   "message": "%message",
-                   "requestId": "%X{X-Request-ID}"
-                }
+                {"level":"%level", "class":"%logger{36}", "thread":"%thread", "message": "%message"}
                 """);
         encoder.setMessage(msg);
         encoder.start();

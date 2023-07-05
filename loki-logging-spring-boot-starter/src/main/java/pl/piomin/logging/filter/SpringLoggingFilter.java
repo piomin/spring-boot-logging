@@ -9,7 +9,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
-import org.slf4j.Marker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -54,8 +53,8 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
             final long startTime = System.currentTimeMillis();
             final SpringRequestWrapper wrappedRequest = new SpringRequestWrapper(request);
             LabelMarker marker = LabelMarker.of(() -> Map.of("audit", "true",
-                    "X-Request-ID", MDC.get("X-Request-ID"),
-                    "X-Correlation-ID", MDC.get("X-Correlation-ID")));
+                    "requestId", MDC.get("X-Request-ID"),
+                    "correlationId", MDC.get("X-Correlation-ID")));
             if (logHeaders)
                 LOGGER.info(marker, "Request: method={}, uri={}, payload={}, headers={}, audit={}", wrappedRequest.getMethod(),
                         wrappedRequest.getRequestURI(), IOUtils.toString(wrappedRequest.getInputStream(),
@@ -81,11 +80,11 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
     private void logResponse(long startTime, SpringResponseWrapper wrappedResponse, int overriddenStatus) throws IOException {
         final long duration = System.currentTimeMillis() - startTime;
         wrappedResponse.setCharacterEncoding("UTF-8");
-        LabelMarker marker = LabelMarker.of(() -> Map.of("X-Response-Time", String.valueOf(duration),
-                "X-Response-Status", String.valueOf(overriddenStatus),
+        LabelMarker marker = LabelMarker.of(() -> Map.of("responseTime", String.valueOf(duration),
+                "responseStatus", String.valueOf(overriddenStatus),
                 "audit", "true",
-                "X-Request-ID", MDC.get("X-Request-ID"),
-                "X-Correlation-ID", MDC.get("X-Correlation-ID")));
+                "requestId", MDC.get("X-Request-ID"),
+                "correlationId", MDC.get("X-Correlation-ID")));
         if (logHeaders)
             LOGGER.info(marker, "Response({} ms): status={}, payload={}, headers={}, audit={}", duration,
                     overriddenStatus, IOUtils.toString(wrappedResponse.getContentAsByteArray(),
