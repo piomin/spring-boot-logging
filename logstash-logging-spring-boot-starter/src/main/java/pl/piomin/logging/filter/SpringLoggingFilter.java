@@ -31,14 +31,16 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
     private UniqueIDGenerator generator;
     private String ignorePatterns;
     private boolean logHeaders;
+    private boolean ignorePayload;
 
     @Autowired
     ApplicationContext context;
 
-    public SpringLoggingFilter(UniqueIDGenerator generator, String ignorePatterns, boolean logHeaders) {
+    public SpringLoggingFilter(UniqueIDGenerator generator, String ignorePatterns, boolean logHeaders,boolean ignorePayload) {
         this.generator = generator;
         this.ignorePatterns = ignorePatterns;
         this.logHeaders = logHeaders;
+        this.ignorePayload = ignorePayload;
     }
 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
@@ -54,13 +56,21 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
             final long startTime = System.currentTimeMillis();
             final SpringRequestWrapper wrappedRequest = new SpringRequestWrapper(request);
             if (logHeaders)
-                LOGGER.info("Request: method={}, uri={}, payload={}, headers={}, audit={}", wrappedRequest.getMethod(),
+                if(ignorePayload)
+                    LOGGER.info("Request: method={}, uri={}, headers={}, audit={}", wrappedRequest.getMethod(),
+                            wrappedRequest.getRequestURI(), wrappedRequest.getAllHeaders(), value("audit", true));
+                else
+                    LOGGER.info("Request: method={}, uri={}, payload={}, headers={}, audit={}", wrappedRequest.getMethod(),
                         wrappedRequest.getRequestURI(), IOUtils.toString(wrappedRequest.getInputStream(),
                         wrappedRequest.getCharacterEncoding()), wrappedRequest.getAllHeaders(), value("audit", true));
             else
-                LOGGER.info("Request: method={}, uri={}, payload={}, audit={}", wrappedRequest.getMethod(),
-                        wrappedRequest.getRequestURI(), IOUtils.toString(wrappedRequest.getInputStream(),
-                        wrappedRequest.getCharacterEncoding()), value("audit", true));
+                if (ignorePayload)
+                    LOGGER.info("Request: method={}, uri={}, audit={}", wrappedRequest.getMethod(),
+                            wrappedRequest.getRequestURI(), value("audit", true));
+                else
+                    LOGGER.info("Request: method={}, uri={}, payload={}, audit={}", wrappedRequest.getMethod(),
+                            wrappedRequest.getRequestURI(), IOUtils.toString(wrappedRequest.getInputStream(),
+                                    wrappedRequest.getCharacterEncoding()), value("audit", true));
             final SpringResponseWrapper wrappedResponse = new SpringResponseWrapper(response);
             wrappedResponse.setHeader("X-Request-ID", MDC.get("X-Request-ID"));
             wrappedResponse.setHeader("X-Correlation-ID", MDC.get("X-Correlation-ID"));
@@ -79,13 +89,21 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
         final long duration = System.currentTimeMillis() - startTime;
         wrappedResponse.setCharacterEncoding("UTF-8");
         if (logHeaders)
-            LOGGER.info("Response({} ms): status={}, payload={}, headers={}, audit={}", value("X-Response-Time", duration),
-                    value("X-Response-Status", overriddenStatus), IOUtils.toString(wrappedResponse.getContentAsByteArray(),
-                            wrappedResponse.getCharacterEncoding()), wrappedResponse.getAllHeaders(), value("audit", true));
+            if (ignorePayload)
+                LOGGER.info("Response({} ms): status={}, payload={}, headers={}, audit={}", value("X-Response-Time", duration),
+                        value("X-Response-Status", overriddenStatus), IOUtils.toString(wrappedResponse.getContentAsByteArray(),
+                                wrappedResponse.getCharacterEncoding()), wrappedResponse.getAllHeaders(), value("audit", true));
+            else
+                LOGGER.info("Response({} ms): status={}, headers={}, audit={}", value("X-Response-Time", duration),
+                        value("X-Response-Status", overriddenStatus), wrappedResponse.getAllHeaders(), value("audit", true));
         else
-            LOGGER.info("Response({} ms): status={}, payload={}, audit={}", value("X-Response-Time", duration),
-                    value("X-Response-Status", overriddenStatus),
-                    IOUtils.toString(wrappedResponse.getContentAsByteArray(), wrappedResponse.getCharacterEncoding()), value("audit", true));
+            if (ignorePayload)
+                LOGGER.info("Response({} ms): status={}, audit={}", value("X-Response-Time", duration),
+                        value("X-Response-Status", overriddenStatus), value("audit", true));
+            else
+                LOGGER.info("Response({} ms): status={}, payload={}, audit={}", value("X-Response-Time", duration),
+                        value("X-Response-Status", overriddenStatus),
+                        IOUtils.toString(wrappedResponse.getContentAsByteArray(), wrappedResponse.getCharacterEncoding()), value("audit", true));
     }
 
     private void getHandlerMethod(HttpServletRequest request) throws Exception {
