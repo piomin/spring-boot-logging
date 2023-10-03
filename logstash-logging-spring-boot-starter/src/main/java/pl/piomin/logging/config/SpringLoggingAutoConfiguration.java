@@ -150,4 +150,12 @@ public class SpringLoggingAutoConfiguration {
     public void setCorrelationIdHeaderName(String correlationIdHeaderName) {
         this.correlationIdHeaderName = correlationIdHeaderName;
     }
+
+    public boolean isIgnorePayload() {
+        return ignorePayload;
+    }
+
+    public void setIgnorePayload(boolean ignorePayload) {
+        this.ignorePayload = ignorePayload;
+    }
 }
