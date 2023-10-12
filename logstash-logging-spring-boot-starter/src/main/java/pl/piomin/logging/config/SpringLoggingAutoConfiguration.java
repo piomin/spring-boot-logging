@@ -37,6 +37,8 @@ public class SpringLoggingAutoConfiguration {
     private String requestIdHeaderName = "X-Request-ID";
     private String correlationIdHeaderName = "X-Correlation-ID";
 
+    private boolean ignorePayload = false;
+
     @Value("${spring.application.name:-}")
     String name;
 
@@ -47,7 +49,7 @@ public class SpringLoggingAutoConfiguration {
 
     @Bean
     public SpringLoggingFilter loggingFilter() {
-        return new SpringLoggingFilter(generator(), ignorePatterns, logHeaders);
+        return new SpringLoggingFilter(generator(), ignorePatterns, logHeaders,ignorePayload);
     }
 
     @Bean
@@ -147,5 +149,13 @@ public class SpringLoggingAutoConfiguration {
 
     public void setCorrelationIdHeaderName(String correlationIdHeaderName) {
         this.correlationIdHeaderName = correlationIdHeaderName;
+    }
+
+    public boolean isIgnorePayload() {
+        return ignorePayload;
+    }
+
+    public void setIgnorePayload(boolean ignorePayload) {
+        this.ignorePayload = ignorePayload;
     }
 }
