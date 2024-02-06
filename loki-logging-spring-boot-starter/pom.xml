@@ -35,7 +35,7 @@
         <loki-logback.version>1.4.2</loki-logback.version>
         <spring.version>6.1.3</spring.version>
         <spring.boot.version>3.1.5</spring.boot.version>
-        <slf4j.version>2.0.11</slf4j.version>
+        <slf4j.version>2.0.12</slf4j.version>
         <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
     </properties>
 
