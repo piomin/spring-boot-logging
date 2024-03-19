@@ -54,6 +54,7 @@ public class MainControllerTests {
         assertNotNull(res);
         assertEquals("Hello-1", res);
         assertEquals(2, memoryAppender.getSize());
+        assertFalse(memoryAppender.search("payload=id=1").isEmpty());
     }
 
     @Test
@@ -62,6 +63,7 @@ public class MainControllerTests {
         assertNotNull(res);
         assertEquals("Hello-1", res);
         assertEquals(2, memoryAppender.getSize());
+        assertFalse(memoryAppender.search("payload=1").isEmpty());
     }
 
     @Test

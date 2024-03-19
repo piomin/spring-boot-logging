@@ -53,11 +53,18 @@ public class ReactiveSpringLoggingFilter implements WebFilter {
 
             if (useContentLength && (header == null || header.get(0).equals("0"))) {
                 if (logHeaders)
-                    LOGGER.info("Request: id={}, method={}, uri={}, headers={}, audit={}", requestId, exchange.getRequest().getMethod(),
-                            exchange.getRequest().getURI().getPath(), exchange.getRequest().getHeaders(), value("audit", true));
+                    LOGGER.info("Request: id={}, method={}, uri={}, payload={}, headers={}, audit={}", requestId,
+                            exchange.getRequest().getMethod(),
+                            exchange.getRequest().getURI().getPath(),
+                            exchange.getRequest().getQueryParams() != null ? exchange.getRequest().getQueryParams().toSingleValueMap() : "",
+                            exchange.getRequest().getHeaders(),
+                            value("audit", true));
                 else
-                    LOGGER.info("Request: id={}, method={}, uri={}, audit={}", requestId, exchange.getRequest().getMethod(),
-                            exchange.getRequest().getURI().getPath(), value("audit", true));
+                    LOGGER.info("Request: id={}, method={}, uri={}, payload={}, audit={}", requestId,
+                            exchange.getRequest().getMethod(),
+                            exchange.getRequest().getURI().getPath(),
+                            exchange.getRequest().getQueryParams() != null ? exchange.getRequest().getQueryParams().toSingleValueMap() : "",
+                            value("audit", true));
             }
             ServerWebExchangeDecorator exchangeDecorator = new ServerWebExchangeDecorator(exchange) {
                 @Override

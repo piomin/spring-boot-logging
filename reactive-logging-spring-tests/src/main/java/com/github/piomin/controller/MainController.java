@@ -1,5 +1,6 @@
 package com.github.piomin.controller;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -14,6 +15,16 @@ public class MainController {
 
     @PostMapping
     public Mono<String> postWithId(@RequestBody Integer id) {
+        return Mono.just("Hello-" + id);
+    }
+
+    @GetMapping("/req-param")
+    public Mono<String> findByIdRequest(@RequestParam Integer id) {
+        return Mono.just("Hello-" + id);
+    }
+
+    @PostMapping(value = "/req-param", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public Mono<String> postWithIdRequest(@RequestParam Integer id) {
         return Mono.just("Hello-" + id);
     }
 }
