@@ -1,6 +1,11 @@
 package com.github.piomin;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -9,6 +14,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import pl.piomin.logging.MemoryAppender;
+import pl.piomin.logging.filter.SpringLoggingFilter;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,12 +28,24 @@ public class MainControllerTests {
 
     @Autowired
     TestRestTemplate restTemplate;
+    MemoryAppender memoryAppender;
+
+    @BeforeEach
+    void setup() {
+        Logger logger = (Logger) LoggerFactory.getLogger(SpringLoggingFilter.class);
+        memoryAppender = new MemoryAppender();
+        memoryAppender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
+        logger.setLevel(Level.DEBUG);
+        logger.addAppender(memoryAppender);
+        memoryAppender.start();
+    }
 
     @Test
     public void findById() {
         String res = restTemplate.getForObject("/test/{id}", String.class, 1);
         assertNotNull(res);
         assertEquals("Hello-1", res);
+        assertEquals(2, memoryAppender.getSize());
     }
 
     @Test
@@ -34,6 +53,7 @@ public class MainControllerTests {
         String res = restTemplate.getForObject("/test/req-param?id={id}", String.class, 1);
         assertNotNull(res);
         assertEquals("Hello-1", res);
+        assertEquals(2, memoryAppender.getSize());
     }
 
     @Test
@@ -41,6 +61,7 @@ public class MainControllerTests {
         String res = restTemplate.postForObject("/test", 1, String.class);
         assertNotNull(res);
         assertEquals("Hello-1", res);
+        assertEquals(2, memoryAppender.getSize());
     }
 
     @Test
@@ -56,6 +77,7 @@ public class MainControllerTests {
         assertNotNull(res);
         assertNotNull(res.getBody());
         assertEquals("Hello-1", res.getBody());
+        assertEquals(2, memoryAppender.getSize());
     }
 
     @Test
@@ -72,6 +94,7 @@ public class MainControllerTests {
         assertNotNull(res);
         assertNotNull(res.getBody());
         assertTrue(res.getStatusCode().is2xxSuccessful());
+        assertEquals(2, memoryAppender.getSize());
     }
 
     public Resource getTestFile() throws IOException {
