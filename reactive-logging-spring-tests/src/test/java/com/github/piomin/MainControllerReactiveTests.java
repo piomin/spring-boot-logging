@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import pl.piomin.logging.MemoryAppender;
 import pl.piomin.logging.reactive.filter.ReactiveSpringLoggingFilter;
@@ -22,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class MainControllerTests {
+public class MainControllerReactiveTests {
 
     @Autowired
     WebTestClient webTestClient;
@@ -85,8 +83,6 @@ public class MainControllerTests {
 
 //    @Test
     void postByIdReqParam() {
-        MultiValueMap<String, Integer> map = new LinkedMultiValueMap<>();
-        map.add("id", 1);
         String res = webTestClient.post()
                 .uri("/test/req-param")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
