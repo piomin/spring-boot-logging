@@ -9,8 +9,44 @@
         <version>2.0.3</version>
     </parent>
 
-    <groupId>pl.piomin</groupId>
     <artifactId>logging-spring-commons</artifactId>
+
+    <name>logging-spring-commons</name>
+    <description>Library for HTTP logging with Spring Boot</description>
+    <url>https://github.com/piomin/spring-boot-logging</url>
+
+    <developers>
+        <developer>
+            <name>Piotr Mińkowski</name>
+            <email>piotr.minkowski@gmail.com</email>
+            <url>https://github.com/piomin</url>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/piomin/spring-boot-logging.git</connection>
+        <developerConnection>scm:git:git@github.com:piomin/spring-boot-logging.git</developerConnection>
+        <url>https://github.com/piomin/spring-boot-logging</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
