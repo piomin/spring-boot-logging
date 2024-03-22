@@ -21,12 +21,12 @@ public class MainController {
     }
 
     @GetMapping("/req-param")
-    public String findByIdRequest(@RequestParam Integer id) {
+    public String findByIdRequest(@RequestParam("id") Integer id) {
         return "Hello-" + id;
     }
 
     @PostMapping(value = "/req-param", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String postWithIdRequest(@RequestParam Integer id) {
+    public String postWithIdRequest(@RequestParam("id") Integer id) {
         return "Hello-" + id;
     }
 

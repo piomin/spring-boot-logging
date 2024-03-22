@@ -19,12 +19,12 @@ public class MainController {
     }
 
     @GetMapping("/req-param")
-    public Mono<String> findByIdRequest(@RequestParam Integer id) {
+    public Mono<String> findByIdRequest(@RequestParam("id") Integer id) {
         return Mono.just("Hello-" + id);
     }
 
     @PostMapping(value = "/req-param", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public Mono<String> postWithIdRequest(@RequestParam Integer id) {
+    public Mono<String> postWithIdRequest(@RequestParam("id") Integer id) {
         return Mono.just("Hello-" + id);
     }
 }
