@@ -32,7 +32,7 @@
         <commons-io.version>2.16.1</commons-io.version>
         <javax-servlet.version>6.0.0</javax-servlet.version>
         <logstash-logback.version>7.4</logstash-logback.version>
-        <spring.version>6.1.7</spring.version>
+        <spring.version>6.1.8</spring.version>
         <spring.boot.version>3.2.5</spring.boot.version>
         <slf4j.version>2.0.13</slf4j.version>
         <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
