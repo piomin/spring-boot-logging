@@ -12,7 +12,7 @@
     <url>https://github.com/piomin/spring-boot-logging</url>
 
     <properties>
-        <jakarta-servlet.version>6.0.0</jakarta-servlet.version>
+        <jakarta-servlet.version>6.1.0</jakarta-servlet.version>
         <java.version>17</java.version>
         <commons-io.version>2.16.1</commons-io.version>
         <javax-servlet.version>4.0.1</javax-servlet.version>
