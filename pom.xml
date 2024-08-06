@@ -19,7 +19,7 @@
         <logstash-logback.version>5.3</logstash-logback.version>
         <spring.version>6.1.11</spring.version>
         <spring.boot.version>3.3.2</spring.boot.version>
-        <slf4j.version>2.0.13</slf4j.version>
+        <slf4j.version>2.0.14</slf4j.version>
         <sonar.projectKey>piomin_spring-boot-logging</sonar.projectKey>
         <sonar.organization>piomin</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
