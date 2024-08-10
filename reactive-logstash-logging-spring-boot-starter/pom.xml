@@ -33,7 +33,7 @@
         <logstash-logback.version>7.4</logstash-logback.version>
         <spring.version>6.1.11</spring.version>
         <spring.boot.version>3.3.2</spring.boot.version>
-        <slf4j.version>2.0.15</slf4j.version>
+        <slf4j.version>2.0.16</slf4j.version>
         <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
     </properties>
 
