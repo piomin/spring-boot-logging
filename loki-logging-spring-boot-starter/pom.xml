@@ -30,7 +30,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <commons-io.version>2.17.0</commons-io.version>
+        <commons-io.version>2.18.0</commons-io.version>
         <javax-servlet.version>6.1.0</javax-servlet.version>
         <loki-logback.version>1.5.2</loki-logback.version>
         <spring.version>6.2.0</spring.version>
