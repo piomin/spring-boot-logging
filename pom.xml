@@ -14,7 +14,7 @@
     <properties>
         <jakarta-servlet.version>6.1.0</jakarta-servlet.version>
         <java.version>17</java.version>
-        <commons-io.version>2.18.0</commons-io.version>
+        <commons-io.version>2.19.0</commons-io.version>
         <javax-servlet.version>4.0.1</javax-servlet.version>
         <logstash-logback.version>5.3</logstash-logback.version>
         <spring.version>6.2.5</spring.version>
