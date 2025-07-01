@@ -11,9 +11,12 @@ jobs:
           command: mvn verify sonar:sonar
 
 executors:
-  jdk:
-    docker:
-      - image: 'cimg/openjdk:21.0.6'
+  machine_executor_amd64:
+    machine:
+      image: ubuntu-2204:current
+    environment:
+      architecture: "amd64"
+      platform: "linux/amd64"
 
 orbs:
   maven: circleci/maven@2.0.0
@@ -22,7 +25,7 @@ workflows:
   maven_test:
     jobs:
       - maven/test:
-          executor: jdk
+          executor: machine_executor_amd64
           verify_dependencies: false
       - build:
           context: SonarCloud
