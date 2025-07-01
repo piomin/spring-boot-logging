@@ -83,7 +83,7 @@ public class SpringLoggingAutoConfiguration {
 //        label.setReadMarkers(true);
 //        label.setPattern("app=" + name + ",host=${HOSTNAME},level=%level");
         loki4jAppender.setReadMarkers(true);
-        loki4jAppender.setLabels("app=" + name + ",host=${HOSTNAME},level=%level");
+        loki4jAppender.setLabels("app=" + name + "\nhost=${HOSTNAME}\nlevel=%level");
 //        encoder.setLabel(label);
         JsonLayout l = new JsonLayout();
         loki4jAppender.setMessage(l);
