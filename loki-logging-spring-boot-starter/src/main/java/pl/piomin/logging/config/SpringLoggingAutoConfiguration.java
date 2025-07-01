@@ -4,7 +4,6 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import com.github.loki4j.logback.*;
 import org.slf4j.LoggerFactory;
-import org.slf4j.spi.LoggingEventBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -79,7 +78,6 @@ public class SpringLoggingAutoConfiguration {
         label.setReadMarkers(true);
         label.setPattern("app=" + name + ",host=${HOSTNAME},level=%level");
         encoder.setLabel(label);
-        encoder.setSortByTime(true);
         JsonLayout l = new JsonLayout();
         encoder.setMessage(l);
         encoder.start();
