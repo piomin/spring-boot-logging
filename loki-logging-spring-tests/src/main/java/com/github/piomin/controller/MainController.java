@@ -31,7 +31,6 @@ public class MainController {
     }
 
     @PostMapping(value = "/req-file")
-    @PostMapping(value = "/req-file")
     public String processFile(@RequestParam("file") MultipartFile file) throws IOException {
         return file.getOriginalFilename() + file.getSize();
     }
