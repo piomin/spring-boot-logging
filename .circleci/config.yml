@@ -19,7 +19,7 @@ executors:
       platform: "linux/amd64"
 
 orbs:
-  maven: circleci/maven@2.0.0
+  maven: circleci/maven@2.1.0
 
 workflows:
   maven_test:
