@@ -29,7 +29,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <commons-io.version>2.20.0</commons-io.version>
+        <commons-io.version>2.21.0</commons-io.version>
         <logstash-logback.version>8.1</logstash-logback.version>
         <spring.version>6.2.12</spring.version>
         <spring.boot.version>3.5.7</spring.boot.version>
