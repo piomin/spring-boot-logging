@@ -18,7 +18,7 @@
         <javax-servlet.version>4.0.1</javax-servlet.version>
         <logstash-logback.version>5.3</logstash-logback.version>
         <spring.version>6.2.14</spring.version>
-        <spring.boot.version>3.5.7</spring.boot.version>
+        <spring.boot.version>3.5.8</spring.boot.version>
         <slf4j.version>2.0.17</slf4j.version>
         <sonar.projectKey>piomin_spring-boot-logging</sonar.projectKey>
         <sonar.organization>piomin</sonar.organization>
