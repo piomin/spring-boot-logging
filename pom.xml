@@ -38,7 +38,7 @@
         <java.version>21</java.version>
         <commons-io.version>2.21.0</commons-io.version>
 <!--        <javax-servlet.version>4.0.1</javax-servlet.version>-->
-        <logstash-logback.version>5.3</logstash-logback.version>
+        <logstash-logback.version>8.1</logstash-logback.version>
         <loki-logback.version>2.0.1</loki-logback.version>
         <spring.version>6.2.14</spring.version>
         <spring.boot.version>3.5.8</spring.boot.version>

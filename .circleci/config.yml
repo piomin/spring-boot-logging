@@ -1,5 +1,10 @@
 version: 2.1
 
+parameters:
+  run_release:
+    type: boolean
+    default: false
+
 jobs:
   build:
     docker:
@@ -21,9 +26,14 @@ jobs:
       - run:
           name: Import GPG key
           command: |
-            KEY_ID=3A8B4107A1136E510C277E6ACB5AA9A118C72FD7
-            curl -O https://keys.openpgp.org/vks/v1/by-fingerprint/$KEY_ID
-            gpg --import $KEY_ID
+            mkdir -p ~/.gnupg
+            chmod 700 ~/.gnupg
+      
+            echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+            echo "$GPG_PUBLIC_KEY"  | gpg --batch --import
+      
+            echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+            gpgconf --reload gpg-agent
       - run:
           name: List GPG keys
           command: |
@@ -46,8 +56,14 @@ jobs:
       - run:
           name: Release
           command: |
-            gpg --version
             mvn deploy -DskipTests -Proot-release
+          environment:
+            GPG_TTY: /dev/tty
+            MAVEN_GPG_PASSPHRASE: ${GPG_PASSPHRASE}
+      - run:
+          name: Release All
+          command: |
+            mvn deploy -DskipTests -Prelease
           environment:
             GPG_TTY: /dev/tty
             MAVEN_GPG_PASSPHRASE: ${GPG_PASSPHRASE}
@@ -69,7 +85,14 @@ workflows:
       - maven/test:
           executor: machine_executor_amd64
           verify_dependencies: false
-      - build:
+      - analyze:
           context: SonarCloud
       - release:
+          requires:
+            - analyze
+            - maven/test
+          filters:
+            branches:
+              only: master
           context: Central
+          when: << pipeline.parameters.run_release >>
