@@ -1,10 +1,5 @@
 version: 2.1
 
-parameters:
-  run_release:
-    type: boolean
-    default: false
-
 jobs:
   analyze:
     docker:
@@ -82,7 +77,11 @@ orbs:
   maven: circleci/maven@2.1.1
 
 workflows:
-  maven_test:
+  build:
+    parameters:
+      run_release:
+        type: boolean
+        default: false
     jobs:
       - maven/test:
           executor: machine_executor_amd64
@@ -93,4 +92,8 @@ workflows:
           requires:
             - analyze
             - maven/test
+#          filters:
+#            branches:
+#              only: master
           context: Central
+          when: << workflow.parameters.run_release >>
