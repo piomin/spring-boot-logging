@@ -1,5 +1,10 @@
 version: 2.1
 
+parameters:
+  run_release:
+    type: boolean
+    default: false
+
 jobs:
   analyze:
     docker:
@@ -64,6 +69,7 @@ jobs:
             GPG_TTY: /dev/tty
             MAVEN_GPG_PASSPHRASE: ${GPG_PASSPHRASE}
           when: << pipeline.parameters.run_release >>
+    when: << parameters.run_release >>
 
 executors:
   machine_executor_amd64:
@@ -96,4 +102,4 @@ workflows:
 #            branches:
 #              only: master
           context: Central
-          when: << workflow.parameters.run_release >>
+          run_release: << pipeline.parameters.run_release >>
