@@ -99,4 +99,3 @@ workflows:
 #            branches:
 #              only: master
           context: Central
-          when: << pipeline.parameters.run_release >>
