@@ -93,7 +93,7 @@ workflows:
           requires:
             - analyze
             - maven/test
-          filters:
-            branches:
-              only: master
+#          filters:
+#            branches:
+#              only: master
           context: Central
