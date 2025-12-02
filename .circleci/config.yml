@@ -32,7 +32,7 @@ jobs:
           name: Setup Maven settings
           command: |
             mkdir -p ~/.m2
-            cat > ~/.m2/settings.xml <<EOL
+            cat > ~/.m2/settings.xml << 'EOL'
             <settings>
               <servers>
                 <server>
