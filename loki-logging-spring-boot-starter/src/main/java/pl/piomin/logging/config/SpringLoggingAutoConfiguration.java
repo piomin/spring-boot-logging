@@ -2,7 +2,6 @@ package pl.piomin.logging.config;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
-import com.github.loki4j.client.pipeline.PipelineConfig;
 import com.github.loki4j.logback.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import pl.piomin.logging.client.RestTemplateSetHeaderInterceptor;
 import pl.piomin.logging.filter.SpringLoggingFilter;
@@ -61,6 +61,13 @@ public class SpringLoggingAutoConfiguration {
         interceptorList.add(new RestTemplateSetHeaderInterceptor());
         restTemplate.setInterceptors(interceptorList);
         return restTemplate;
+    }
+
+    @Bean
+    public RestClient restClient() {
+        return RestClient.builder()
+                .baseUrl(url)
+                .build();
     }
 
     @Bean
