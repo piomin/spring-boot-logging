@@ -28,6 +28,29 @@ jobs:
           name: List GPG keys
           command: |
             gpg --list-keys
+      - run:
+          name: Setup Maven settings
+          command: |
+            mkdir -p ~/.m2
+            cat > ~/.m2/settings.xml <<EOL
+            <settings>
+              <servers>
+                <server>
+                  <id>central</id>
+                  <username>${CENTRAL_USERNAME}</username>
+                  <password>${CENTRAL_TOKEN}</password>
+                </server>
+              </servers>
+            </settings>
+            EOL
+      - run:
+          name: Release
+          command: |
+            gpg --version
+            mvn clean deploy -DskipTests
+          environment:
+            GPG_TTY: /dev/tty
+            MAVEN_GPG_PASSPHRASE: ${GPG_PASSPHRASE}
 
 executors:
   machine_executor_amd64:
@@ -48,4 +71,5 @@ workflows:
           verify_dependencies: false
       - build:
           context: SonarCloud
-      - release
+      - release:
+          context: Central
