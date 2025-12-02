@@ -9,6 +9,25 @@ jobs:
       - run:
           name: Analyze on SonarCloud
           command: mvn verify sonar:sonar
+  release:
+    docker:
+      - image: maven:3.9.3-eclipse-temurin-21
+    steps:
+      - checkout
+      - run:
+          name: Install GPG
+          command: |
+            apt-get update && apt-get install -y gnupg2 curl
+      - run:
+          name: Import GPG key
+          command: |
+            KEY_ID=3A8B4107A1136E510C277E6ACB5AA9A118C72FD7
+            curl -O https://keys.openpgp.org/vks/v1/by-fingerprint/$KEY_ID
+            gpg --import $KEY_ID
+      - run:
+          name: List GPG keys
+          command: |
+            gpg --list-keys
 
 executors:
   machine_executor_amd64:
@@ -29,3 +48,4 @@ workflows:
           verify_dependencies: false
       - build:
           context: SonarCloud
+      - release
