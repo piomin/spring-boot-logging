@@ -64,8 +64,7 @@ jobs:
             mvn deploy -DskipTests -Proot-release
           environment:
             GPG_TTY: /dev/tty
-            MAVEN_GPG_KEY: ${GPG_KEY_FINGERPRINT}
-            MAVEN_GPG_PASSPHRASE: ${GPG_PASSPHRASE}
+            MAVEN_GPG_PASSPHRASE: 123456
       - run:
           name: Release All
           command: |
