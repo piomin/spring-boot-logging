@@ -38,7 +38,8 @@ jobs:
             echo "Public key imported"
             echo "$GPG_OWNER_TRUST"  | gpg --import-ownertrust
             echo "Trust owner imported"
-      
+            
+            gpgconf --kill gpg-agent
             gpg -K
       - run:
           name: Setup Maven settings
