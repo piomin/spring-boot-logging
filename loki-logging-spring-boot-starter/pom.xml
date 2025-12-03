@@ -4,9 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.piomin</groupId>
+    <parent>
+        <groupId>com.github.piomin</groupId>
+        <artifactId>spring-boot-logging</artifactId>
+        <version>2.2.0</version>
+    </parent>
+
     <artifactId>loki-logging-spring-boot-starter</artifactId>
-    <version>2.1.0</version>
 
     <name>loki-logging-spring-boot-starter</name>
     <description>Library for HTTP logging with Spring Boot</description>
@@ -29,13 +33,13 @@
     </licenses>
 
     <properties>
-        <java.version>17</java.version>
-        <commons-io.version>2.21.0</commons-io.version>
-        <javax-servlet.version>6.1.0</javax-servlet.version>
-        <loki-logback.version>2.0.1</loki-logback.version>
-        <spring.version>6.2.14</spring.version>
-        <spring.boot.version>3.5.8</spring.boot.version>
-        <slf4j.version>2.0.17</slf4j.version>
+<!--        <java.version>17</java.version>-->
+<!--        <commons-io.version>2.21.0</commons-io.version>-->
+<!--        <javax-servlet.version>6.1.0</javax-servlet.version>-->
+<!--        <loki-logback.version>2.0.1</loki-logback.version>-->
+<!--        <spring.version>6.2.14</spring.version>-->
+<!--        <spring.boot.version>3.5.8</spring.boot.version>-->
+<!--        <slf4j.version>2.0.17</slf4j.version>-->
         <sonar.moduleKey>${project.artifactId}</sonar.moduleKey>
     </properties>
 
@@ -44,17 +48,6 @@
         <developerConnection>scm:git:git@github.com:piomin/spring-boot-logging.git</developerConnection>
         <url>https://github.com/piomin/spring-boot-logging</url>
     </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <dependencies>
         <dependency>
@@ -89,7 +82,7 @@
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <version>${javax-servlet.version}</version>
+            <version>${jakarta-servlet.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -134,6 +127,16 @@
             <id>release</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.9.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>

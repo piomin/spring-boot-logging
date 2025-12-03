@@ -1,7 +1,12 @@
 version: 2.1
 
+parameters:
+  run_release:
+    type: boolean
+    default: false
+
 jobs:
-  build:
+  analyze:
     docker:
       - image: 'cimg/openjdk:21.0.9'
     steps:
@@ -9,6 +14,64 @@ jobs:
       - run:
           name: Analyze on SonarCloud
           command: mvn verify sonar:sonar
+  release:
+    docker:
+      - image: maven:3.9.11-eclipse-temurin-21
+    steps:
+      - checkout
+      - run:
+          name: Install GPG
+          command: |
+            apt-get update && apt-get install -y gnupg2 curl
+      - run:
+          name: Import GPG key
+          command: |
+            mkdir -p ~/.gnupg
+            chmod 700 ~/.gnupg
+            echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+            echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+            gpgconf --kill gpg-agent
+            
+            echo "$GPG_PRIVATE_KEY" | base64 -d | gpg --batch --yes --pinentry-mode loopback --import
+            echo "Private key imported"
+            echo "$GPG_PUBLIC_KEY"  | base64 -d | gpg --batch --yes --pinentry-mode loopback --import
+            echo "Public key imported"
+            echo "$GPG_OWNER_TRUST"  | gpg --import-ownertrust
+            echo "Trust owner imported"
+            
+            gpgconf --reload gpg-agent
+            gpg -K
+            
+            gpg --batch --pinentry-mode loopback --passphrase "$GPG_PASSPHRASE" -K
+      - run:
+          name: Setup Maven settings
+          command: |
+            mkdir -p ~/.m2
+            cat > ~/.m2/settings.xml \<<EOL
+            <settings>
+              <servers>
+                <server>
+                  <id>central</id>
+                  <username>${CENTRAL_USERNAME}</username>
+                  <password>${CENTRAL_TOKEN}</password>
+                </server>
+              </servers>
+            </settings>
+            EOL
+      - run:
+          name: Release
+          command: |
+            mvn deploy -DskipTests -Proot-release
+          environment:
+            GPG_TTY: /dev/tty
+            MAVEN_GPG_PASSPHRASE: 123456
+      - run:
+          name: Release All
+          command: |
+            mvn deploy -DskipTests -Prelease
+          environment:
+            GPG_TTY: /dev/tty
+            MAVEN_GPG_PASSPHRASE: 123456
 
 executors:
   machine_executor_amd64:
@@ -22,10 +85,21 @@ orbs:
   maven: circleci/maven@2.1.1
 
 workflows:
-  maven_test:
+  build:
+    when:
+      equal: [ false, << pipeline.parameters.run_release >> ]
     jobs:
       - maven/test:
           executor: machine_executor_amd64
           verify_dependencies: false
-      - build:
+      - analyze:
           context: SonarCloud
+  release:
+    when: << pipeline.parameters.run_release >>
+    jobs:
+      - analyze:
+          context: SonarCloud
+      - release:
+          context: Central
+          requires:
+            - analyze
