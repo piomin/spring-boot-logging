@@ -71,8 +71,7 @@ jobs:
             mvn deploy -DskipTests -Prelease
           environment:
             GPG_TTY: /dev/tty
-            MAVEN_GPG_PASSPHRASE: ${GPG_PASSPHRASE}
-            MAVEN_GPG_KEY: ${GPG_KEY_FINGERPRINT}
+            MAVEN_GPG_PASSPHRASE: 123456
 
 executors:
   machine_executor_amd64:
@@ -87,20 +86,20 @@ orbs:
 
 workflows:
   build:
-    parameters:
-      run_release:
-        type: boolean
-        default: false
+    when:
+      equal: [ false, << pipeline.parameters.run_release >> ]
     jobs:
       - maven/test:
           executor: machine_executor_amd64
           verify_dependencies: false
       - analyze:
           context: SonarCloud
+  release:
+    when: << pipeline.parameters.run_release >>
+    jobs:
+      - analyze:
+          context: SonarCloud
       - release:
-          requires:
-            - maven/test
-#          filters:
-#            branches:
-#              only: master
           context: Central
+          requires:
+            - analyze
