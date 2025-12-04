@@ -127,16 +127,21 @@
             <id>release</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.sonatype.central</groupId>
-                        <artifactId>central-publishing-maven-plugin</artifactId>
-                        <version>0.9.0</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <publishingServerId>central</publishingServerId>
-                            <autoPublish>true</autoPublish>
-                        </configuration>
-                    </plugin>
+<!--                    <plugin>-->
+<!--                        <groupId>org.sonatype.central</groupId>-->
+<!--                        <artifactId>central-publishing-maven-plugin</artifactId>-->
+<!--                        <version>0.9.0</version>-->
+<!--                        <extensions>true</extensions>-->
+<!--                        <configuration>-->
+<!--                            <publishingServerId>central</publishingServerId>-->
+<!--                            <autoPublish>true</autoPublish>-->
+<!--                            <excludeArtifacts>-->
+<!--                                <excludeArtifact>logging-spring-tests</excludeArtifact>-->
+<!--                                <excludeArtifact>reactive-logging-spring-tests</excludeArtifact>-->
+<!--                                <excludeArtifact>loki-logging-spring-tests</excludeArtifact>-->
+<!--                            </excludeArtifacts>-->
+<!--                        </configuration>-->
+<!--                    </plugin>-->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>

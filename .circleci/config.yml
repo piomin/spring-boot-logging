@@ -62,16 +62,17 @@ jobs:
               </servers>
             </settings>
             EOL
-      - run:
-          name: Release
-          command: |
-            mvn deploy -DskipTests -Proot-release
-          environment:
-            GPG_TTY: /dev/tty
-            MAVEN_GPG_PASSPHRASE: 123456
+#      - run:
+#          name: Release
+#          command: |
+#            mvn deploy -DskipTests -Proot-release
+#          environment:
+#            GPG_TTY: /dev/tty
+#            MAVEN_GPG_PASSPHRASE: 123456
       - run:
           name: Release All
           command: |
+            cat ~/.m2/settings.xml
             mvn deploy -DskipTests -Prelease
           environment:
             GPG_TTY: /dev/tty
