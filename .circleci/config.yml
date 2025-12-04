@@ -10,7 +10,11 @@ jobs:
     docker:
       - image: 'cimg/openjdk:21.0.9'
     steps:
-      - checkout
+      - git-shallow-clone/checkout_advanced:
+          clone_options: '--filter=blob:none'
+      - run:
+          name: "Git fetch"
+          command: git fetch --no-filter --refetch
       - run:
           name: Analyze on SonarCloud
           command: mvn verify sonar:sonar
@@ -97,8 +101,9 @@ workflows:
   release:
     when: << pipeline.parameters.run_release >>
     jobs:
-      - analyze:
-          context: SonarCloud
+      - maven/test:
+          executor: machine_executor_amd64
+          verify_dependencies: false
       - release:
           context: Central
           requires:
