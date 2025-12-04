@@ -102,9 +102,8 @@ workflows:
   release:
     when: << pipeline.parameters.run_release >>
     jobs:
-      - maven/test:
-          executor: machine_executor_amd64
-          verify_dependencies: false
+      - analyze:
+          context: SonarCloud
       - release:
           context: Central
           requires:
