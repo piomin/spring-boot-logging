@@ -8,7 +8,7 @@ parameters:
 jobs:
   analyze:
     docker:
-      - image: 'cimg/openjdk:21.0.9'
+      - image: 'cimg/openjdk:25.0'
     steps:
       - git-shallow-clone/checkout_advanced:
           clone_options: '--filter=blob:none'
