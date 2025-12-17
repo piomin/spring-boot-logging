@@ -5,19 +5,41 @@
 
     <groupId>com.github.piomin</groupId>
     <artifactId>spring-boot-logging</artifactId>
-    <version>2.2.0-SNAPSHOT</version>
+    <version>2.2.0</version>
     <packaging>pom</packaging>
     <name>spring-boot-logging</name>
     <description>Library for HTTP logging with Spring Boot</description>
     <url>https://github.com/piomin/spring-boot-logging</url>
 
+    <developers>
+        <developer>
+            <name>Piotr Mińkowski</name>
+            <email>piotr.minkowski@gmail.com</email>
+            <url>https://github.com/piomin</url>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/piomin/spring-boot-logging.git</connection>
+        <developerConnection>scm:git:git@github.com:piomin/spring-boot-logging.git</developerConnection>
+        <url>https://github.com/piomin/spring-boot-logging</url>
+    </scm>
+
     <properties>
         <jakarta-servlet.version>6.1.0</jakarta-servlet.version>
         <java.version>21</java.version>
         <commons-io.version>2.21.0</commons-io.version>
-        <javax-servlet.version>4.0.1</javax-servlet.version>
-        <logstash-logback.version>5.3</logstash-logback.version>
-        <spring.version>6.2.14</spring.version>
+        <logstash-logback.version>9.0</logstash-logback.version>
+        <loki-logback.version>2.0.1</loki-logback.version>
+        <spring.version>6.2.15</spring.version>
         <spring.boot.version>3.5.8</spring.boot.version>
         <slf4j.version>2.0.17</slf4j.version>
         <sonar.projectKey>piomin_spring-boot-logging</sonar.projectKey>
@@ -36,5 +58,77 @@
         <module>logging-spring-commons</module>
         <module>loki-logging-spring-tests</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.9.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <excludeArtifacts>
+                                <excludeArtifact>logging-spring-tests</excludeArtifact>
+                                <excludeArtifact>reactive-logging-spring-tests</excludeArtifact>
+                                <excludeArtifact>loki-logging-spring-tests</excludeArtifact>
+                            </excludeArtifacts>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>root-release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.9.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                            <waitUntil>published</waitUntil>
+                            <excludeArtifacts>
+                                <excludeArtifact>logging-spring-tests</excludeArtifact>
+                                <excludeArtifact>reactive-logging-spring-tests</excludeArtifact>
+                                <excludeArtifact>loki-logging-spring-tests</excludeArtifact>
+                                <excludeArtifact>logging-spring-commons</excludeArtifact>
+                                <excludeArtifact>loki-logging-spring-boot-starter</excludeArtifact>
+                                <excludeArtifact>reactive-logstash-logging-spring-boot-starter</excludeArtifact>
+                                <excludeArtifact>logstash-logging-spring-boot-starter</excludeArtifact>
+                            </excludeArtifacts>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>3.2.8</version>
+                        <configuration>
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
