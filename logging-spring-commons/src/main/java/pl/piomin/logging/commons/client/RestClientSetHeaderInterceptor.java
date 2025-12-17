@@ -12,8 +12,14 @@ public class RestClientSetHeaderInterceptor implements ClientHttpRequestIntercep
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-        request.getHeaders().add("X-Correlation-ID", MDC.get("X-Correlation-ID"));
-        request.getHeaders().add("X-Request-ID", MDC.get("X-Request-ID"));
+        String correlationId = MDC.get("X-Correlation-ID");
+        if (correlationId != null) {
+            request.getHeaders().add("X-Correlation-ID", correlationId);
+        }
+        String requestId = MDC.get("X-Request-ID");
+        if (requestId != null) {
+            request.getHeaders().add("X-Request-ID", requestId);
+        }
         return execution.execute(request, body);
     }
 
