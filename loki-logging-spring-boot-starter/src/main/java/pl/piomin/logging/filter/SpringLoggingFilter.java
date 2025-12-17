@@ -17,8 +17,8 @@ import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import pl.piomin.logging.util.UniqueIDGenerator;
-import pl.piomin.logging.wrapper.SpringRequestWrapper;
-import pl.piomin.logging.wrapper.SpringResponseWrapper;
+import pl.piomin.logging.commons.wrapper.SpringRequestWrapper;
+import pl.piomin.logging.commons.wrapper.SpringResponseWrapper;
 
 import java.io.IOException;
 import java.util.Map;

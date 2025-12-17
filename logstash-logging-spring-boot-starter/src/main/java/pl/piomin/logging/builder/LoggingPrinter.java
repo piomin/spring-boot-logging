@@ -1,10 +1,9 @@
 package pl.piomin.logging.builder;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
 import org.slf4j.Logger;
-import pl.piomin.logging.wrapper.SpringRequestWrapper;
-import pl.piomin.logging.wrapper.SpringResponseWrapper;
+import pl.piomin.logging.commons.wrapper.SpringRequestWrapper;
+import pl.piomin.logging.commons.wrapper.SpringResponseWrapper;
 
 import java.io.IOException;
 
@@ -41,6 +40,7 @@ public class LoggingPrinter {
                     wrappedRequest.getRequestURI(), IOUtils.toString(wrappedRequest.getInputStream(),
                             wrappedRequest.getCharacterEncoding()), value("audit", true));
     }
+
     public void printResponse(SpringResponseWrapper wrappedResponse,long duration,int overriddenStatus) {
         if (logHeaders)
             if (ignorePayload)
@@ -59,6 +59,7 @@ public class LoggingPrinter {
                     value("X-Response-Status", overriddenStatus),
                     IOUtils.toString(wrappedResponse.getContentAsByteArray(), wrappedResponse.getCharacterEncoding()), value("audit", true));
     }
+
     public static class Builder {
         private  boolean logHeaders;
         private  boolean ignorePayload;

@@ -17,8 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
-import pl.piomin.logging.client.RestClientSetHeaderInterceptor;
-import pl.piomin.logging.client.RestTemplateSetHeaderInterceptor;
+import pl.piomin.logging.commons.client.RestClientSetHeaderInterceptor;
 import pl.piomin.logging.filter.SpringLoggingFilter;
 import pl.piomin.logging.util.UniqueIDGenerator;
 
@@ -64,7 +63,7 @@ public class SpringLoggingAutoConfiguration {
     @ConditionalOnBean
     public RestTemplate existingRestTemplate(final RestTemplate restTemplate) {
         List<ClientHttpRequestInterceptor> interceptorList = new ArrayList<ClientHttpRequestInterceptor>();
-        interceptorList.add(new RestTemplateSetHeaderInterceptor());
+        interceptorList.add(new RestClientSetHeaderInterceptor());
         restTemplate.setInterceptors(interceptorList);
         return restTemplate;
     }
