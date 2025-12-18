@@ -20,7 +20,7 @@ jobs:
           command: mvn verify sonar:sonar
   release:
     docker:
-      - image: maven:3.9.11-eclipse-temurin-21
+      - image: maven:3.9.12-eclipse-temurin-21
     steps:
       - checkout
       - run:
