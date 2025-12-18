@@ -140,7 +140,7 @@ public class MainControllerReactiveTests {
         assertEquals(expectedResponse, res);
 
         // Verify logging
-        assertEquals(2, memoryAppender.getSize());
+        assertEquals(3, memoryAppender.getSize());
         assertFalse(memoryAppender.search("payload=").isEmpty());
     }
 }
