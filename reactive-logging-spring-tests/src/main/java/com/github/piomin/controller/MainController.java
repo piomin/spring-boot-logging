@@ -1,6 +1,7 @@
 package com.github.piomin.controller;
 
 import org.springframework.http.MediaType;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -26,5 +27,11 @@ public class MainController {
     @PostMapping(value = "/req-param", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public Mono<String> postWithIdRequest(@RequestParam("id") Integer id) {
         return Mono.just("Hello-" + id);
+    }
+
+    @PostMapping(value = "/form-data", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Mono<String> handleFormData(@RequestPart("name") String name,
+                                       @RequestPart("file") FilePart file) {
+        return Mono.just(String.format("Received form data - Name: %s, File: %s", name, file.filename()));
     }
 }

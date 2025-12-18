@@ -8,8 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import pl.piomin.logging.MemoryAppender;
 import pl.piomin.logging.reactive.filter.ReactiveSpringLoggingFilter;
@@ -82,17 +86,61 @@ public class MainControllerReactiveTests {
     }
 
 //    @Test
-    void postByIdReqParam() {
+    public void postByIdReqParam() {
+        MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+        formData.add("id", "1");
+
         String res = webTestClient.post()
                 .uri("/test/req-param")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(BodyInserters.fromFormData("id", "1"))
+                .body(BodyInserters.fromFormData(formData))
                 .exchange()
                 .expectStatus().is2xxSuccessful()
                 .expectBody(String.class)
                 .returnResult().getResponseBody();
+
         assertEquals("Hello-1", res);
         assertEquals(2, memoryAppender.getSize());
         assertFalse(memoryAppender.search("payload=1").isEmpty());
+    }
+
+    @Test
+    public void handleFormData() throws Exception {
+        // Create a test file
+        String testContent = "test file content";
+        String fileName = "test.txt";
+        String name = "test-user";
+
+        // Create a mock file part
+        byte[] fileContent = testContent.getBytes();
+        Resource resource = new ByteArrayResource(fileContent) {
+            @Override
+            public String getFilename() {
+                return fileName;
+            }
+        };
+
+        // Create form data
+        MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
+        formData.add("name", name);
+        formData.add("file", resource);
+
+        // Send request and verify response
+        String res = webTestClient.post()
+                .uri("/test/form-data")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(formData))
+                .exchange()
+                .expectStatus().is2xxSuccessful()
+                .expectBody(String.class)
+                .returnResult().getResponseBody();
+
+        // Verify response
+        String expectedResponse = String.format("Received form data - Name: %s, File: %s", name, fileName);
+        assertEquals(expectedResponse, res);
+
+        // Verify logging
+        assertEquals(2, memoryAppender.getSize());
+        assertFalse(memoryAppender.search("payload=").isEmpty());
     }
 }

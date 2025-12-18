@@ -2,8 +2,12 @@ package pl.piomin.logging.reactive.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.codec.multipart.Part;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.BodyExtractors;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.ServerWebExchangeDecorator;
 import org.springframework.web.server.WebFilter;
@@ -51,6 +55,16 @@ public class ReactiveSpringLoggingFilter implements WebFilter {
             }
             exchange.getResponse().getHeaders().set("X-Request-Id", requestId);
 
+            exchange.getMultipartData().subscribe(parts -> {
+                if (!parts.asSingleValueMap().isEmpty()) {
+                    LOGGER.info("Request: id={}, method={}, uri={}, payload={}, audit={}", requestId,
+                            exchange.getRequest().getMethod(),
+                            exchange.getRequest().getURI().getPath(),
+                            parts.asSingleValueMap(),
+                            value("audit", true));
+                }
+            });
+
             if (useContentLength && (header == null || header.get(0).equals("0"))) {
                 if (logHeaders)
                     LOGGER.info("Request: id={}, method={}, uri={}, payload={}, headers={}, audit={}", requestId,
@@ -66,6 +80,7 @@ public class ReactiveSpringLoggingFilter implements WebFilter {
                             exchange.getRequest().getQueryParams() != null ? exchange.getRequest().getQueryParams().toSingleValueMap() : "",
                             value("audit", true));
             }
+
             ServerWebExchangeDecorator exchangeDecorator = new ServerWebExchangeDecorator(exchange) {
                 @Override
                 public ServerHttpRequest getRequest() {
@@ -76,7 +91,9 @@ public class ReactiveSpringLoggingFilter implements WebFilter {
                 public ServerHttpResponse getResponse() {
                     return new ResponseLoggingInterceptor(super.getResponse(), startTime, logHeaders, requestId);
                 }
+
             };
+
             return chain.filter(exchangeDecorator)
                     .doOnSuccess(aVoid -> {
                         logResponse(startTime, exchangeDecorator.getResponse(), exchangeDecorator.getResponse().getStatusCode().value(), requestId);
