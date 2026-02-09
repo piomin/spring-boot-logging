@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -49,8 +50,8 @@ public class SpringLoggingAutoConfiguration {
     }
 
     @Bean
-    public SpringLoggingFilter loggingFilter() {
-        return new SpringLoggingFilter(generator(), ignorePatterns, logHeaders,ignorePayload);
+    public SpringLoggingFilter loggingFilter(ApplicationContext context) {
+        return new SpringLoggingFilter(generator(), ignorePatterns, logHeaders, ignorePayload, context);
     }
 
     @Bean
@@ -60,9 +61,9 @@ public class SpringLoggingAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnBean
+    @ConditionalOnBean(RestTemplate.class)
     public RestTemplate existingRestTemplate(final RestTemplate restTemplate) {
-        List<ClientHttpRequestInterceptor> interceptorList = new ArrayList<ClientHttpRequestInterceptor>();
+        List<ClientHttpRequestInterceptor> interceptorList = new ArrayList<>(restTemplate.getInterceptors());
         interceptorList.add(new RestClientSetHeaderInterceptor());
         restTemplate.setInterceptors(interceptorList);
         return restTemplate;

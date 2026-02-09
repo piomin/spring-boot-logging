@@ -16,6 +16,10 @@ public class UniqueIDGenerator {
     }
 
     public void generateAndSetMDC(HttpServletRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("HttpServletRequest cannot be null");
+        }
+
         String requestId = request.getHeader(requestIdHeaderName);
         if (requestId == null)
             requestId = UUID.randomUUID().toString();
