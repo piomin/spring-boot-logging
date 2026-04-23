@@ -36,7 +36,7 @@
     <properties>
         <jakarta-servlet.version>6.1.0</jakarta-servlet.version>
         <java.version>21</java.version>
-        <commons-io.version>2.21.0</commons-io.version>
+        <commons-io.version>2.22.0</commons-io.version>
         <logstash-logback.version>9.0</logstash-logback.version>
         <loki-logback.version>2.0.3</loki-logback.version>
         <spring.version>7.0.7</spring.version>
