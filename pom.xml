@@ -41,7 +41,7 @@
         <loki-logback.version>2.0.3</loki-logback.version>
         <spring.version>7.0.7</spring.version>
         <spring.boot.version>4.0.6</spring.boot.version>
-        <slf4j.version>2.0.17</slf4j.version>
+        <slf4j.version>2.0.18</slf4j.version>
         <sonar.projectKey>piomin_spring-boot-logging</sonar.projectKey>
         <sonar.organization>piomin</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
