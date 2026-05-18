@@ -41,7 +41,13 @@ public class ReactiveSpringLoggingAutoConfiguration {
 
     @Bean
     public ReactiveSpringLoggingFilter reactiveSpringLoggingFilter() {
-        return new ReactiveSpringLoggingFilter(generator(), ignorePatterns, logHeaders, useContentLength);
+    	return new ReactiveSpringLoggingFilter(
+    	        generator(),
+    	        ignorePatterns,
+    	        logHeaders,
+    	        useContentLength,
+    	        requestIdHeaderName
+    	);
     }
 
     @Bean

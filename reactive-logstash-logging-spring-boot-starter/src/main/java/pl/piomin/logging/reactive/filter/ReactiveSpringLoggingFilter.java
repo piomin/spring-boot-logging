@@ -29,9 +29,16 @@ public class ReactiveSpringLoggingFilter implements WebFilter {
     private String ignorePatterns;
     private boolean logHeaders;
     private boolean useContentLength;
+    private String requestIdHeaderName;
     private String requestId;
 
-    public ReactiveSpringLoggingFilter(UniqueIDGenerator generator, String ignorePatterns, boolean logHeaders, boolean useContentLength) {
+    public ReactiveSpringLoggingFilter(
+            UniqueIDGenerator generator,
+            String ignorePatterns,
+            boolean logHeaders,
+            boolean useContentLength,
+            String requestIdHeaderName) {
+    	this.requestIdHeaderName = requestIdHeaderName;
         this.generator = generator;
         this.ignorePatterns = ignorePatterns;
         this.logHeaders = logHeaders;
@@ -47,13 +54,13 @@ public class ReactiveSpringLoggingFilter implements WebFilter {
             final long startTime = System.currentTimeMillis();
             List<String> header = exchange.getRequest().getHeaders().get("Content-Length");
 
-            List<String> requestIdList = exchange.getRequest().getHeaders().get("X-Request-Id");
+            List<String> requestIdList = exchange.getRequest().getHeaders().get(requestIdHeaderName);
             if (requestIdList == null || requestIdList.size() == 0) {
                 requestId = UUID.randomUUID().toString();
             } else {
                 requestId = requestIdList.get(0);
             }
-            exchange.getResponse().getHeaders().set("X-Request-Id", requestId);
+            exchange.getResponse().getHeaders().set(requestIdHeaderName, requestId);
 
             exchange.getMultipartData().subscribe(parts -> {
                 if (!parts.asSingleValueMap().isEmpty()) {
