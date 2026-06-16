@@ -24,7 +24,10 @@ import pl.piomin.logging.reactive.interceptor.ResponseLoggingInterceptor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = "logging.logstash.request-id-header-name=X-Custom-Request-ID"
+)
 @AutoConfigureWebTestClient
 public class MainControllerReactiveTests {
 
@@ -48,6 +51,16 @@ public class MainControllerReactiveTests {
         memoryAppender.start();
     }
 
+    @Test
+    public void shouldUseConfiguredRequestIdHeaderName() {
+        webTestClient.get()
+                .uri("/test/{id}", 1)
+                .header("X-Custom-Request-ID", "custom-request-123")
+                .exchange()
+                .expectStatus().is2xxSuccessful()
+                .expectHeader().valueEquals("X-Custom-Request-ID", "custom-request-123");
+    }
+    
     @Test
     public void findById() {
         String res = webTestClient.get()
