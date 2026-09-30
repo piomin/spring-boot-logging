@@ -58,6 +58,9 @@ public class SpringResponseWrapper extends HttpServletResponseWrapper {
     }
 
     public byte[] getContentAsByteArray() {
+        if (writer != null) {
+            writer.flush();
+        }
         if (copier != null) {
             return copier.getCopy();
         } else {
