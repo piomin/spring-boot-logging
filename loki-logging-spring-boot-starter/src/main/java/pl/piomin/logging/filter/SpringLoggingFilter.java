@@ -73,6 +73,7 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
                 logResponse(startTime, wrappedResponse, 500);
                 throw e;
             }
+            wrappedResponse.flushBuffer();
             logResponse(startTime, wrappedResponse, wrappedResponse.getStatus());
         }
     }
