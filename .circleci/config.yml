@@ -20,7 +20,7 @@ jobs:
           command: mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -DskipTests
   release:
     docker:
-      - image: maven:3.9.16-eclipse-temurin-21
+      - image: maven:3.10.0-eclipse-temurin-21
     steps:
       - checkout
       - run:
