@@ -20,14 +20,19 @@ public class SpringRequestWrapper extends HttpServletRequestWrapper {
     public SpringRequestWrapper(HttpServletRequest request) {
         super(request);
         parameterMap = request.getParameterMap();
-        String query = request.getQueryString();
-        if (query != null) {
-            body = query.getBytes();
+        String contentType = request.getContentType();
+        if (contentType != null && contentType.toLowerCase().startsWith("multipart/")) {
+            body = new byte[0];
         } else {
-            try {
-                body = IOUtils.toByteArray(request.getInputStream());
-            } catch (IOException ex) {
-                body = new byte[0];
+            String query = request.getQueryString();
+            if (query != null) {
+                body = query.getBytes();
+            } else {
+                try {
+                    body = IOUtils.toByteArray(request.getInputStream());
+                } catch (IOException ex) {
+                    body = new byte[0];
+                }
             }
         }
     }
